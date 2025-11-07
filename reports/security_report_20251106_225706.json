@@ -1,0 +1,166 @@
+{
+  "title": "Test Security Report",
+  "generated_at": "2025-11-06T22:57:06.215680",
+  "generated_date": "2025-11-06 22:57:06",
+  "metadata": {},
+  "scan_summary": {
+    "total_findings": 3,
+    "critical": 1,
+    "high": 1,
+    "medium": 1,
+    "low": 0,
+    "info": 0,
+    "findings": [
+      {
+        "title": "Weak SSH Configuration",
+        "severity": "critical",
+        "description": "SSH allows root login",
+        "category": "Network",
+        "remediation": "Set PermitRootLogin to no"
+      },
+      {
+        "title": "Password Expiration Not Set",
+        "severity": "high",
+        "description": "Password maximum age not configured",
+        "category": "Authentication",
+        "remediation": "Set PASS_MAX_DAYS to 90"
+      },
+      {
+        "title": "Firewall Not Enabled",
+        "severity": "medium",
+        "description": "System firewall is disabled",
+        "category": "Network",
+        "remediation": "Enable and configure firewall"
+      }
+    ]
+  },
+  "hardening_summary": {
+    "session_id": "hardening_001",
+    "start_time": "2025-11-06T10:00:00",
+    "end_time": "2025-11-06T10:05:00",
+    "total_rules": 3,
+    "successful_rules": 2,
+    "failed_rules": 1,
+    "skipped_rules": 0,
+    "checkpoint_id": "checkpoint_abc123",
+    "rollback_performed": false,
+    "results": [
+      {
+        "rule_id": "ssh_root_login",
+        "rule_name": "Disable Root Login",
+        "status": "success",
+        "severity": "critical",
+        "before_value": "yes",
+        "after_value": "no",
+        "duration": 1.2,
+        "error": ""
+      },
+      {
+        "rule_id": "pass_max_days",
+        "rule_name": "Set Password Max Age",
+        "status": "success",
+        "severity": "high",
+        "before_value": "99999",
+        "after_value": "90",
+        "duration": 0.8,
+        "error": ""
+      },
+      {
+        "rule_id": "enable_firewall",
+        "rule_name": "Enable Firewall",
+        "status": "failed",
+        "severity": "medium",
+        "before_value": "",
+        "after_value": "",
+        "duration": 0.5,
+        "error": "Firewall service not found"
+      }
+    ]
+  },
+  "compliance": {
+    "current_score": 83.0
+  },
+  "before_after": {},
+  "charts": {
+    "severity_distribution": {
+      "labels": [
+        "Critical",
+        "High",
+        "Medium",
+        "Low",
+        "Info"
+      ],
+      "data": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "colors": [
+        "#dc3545",
+        "#fd7e14",
+        "#ffc107",
+        "#17a2b8",
+        "#6c757d"
+      ]
+    },
+    "hardening_results": {
+      "labels": [
+        "Success",
+        "Failed",
+        "Skipped"
+      ],
+      "data": [
+        2,
+        1,
+        0
+      ],
+      "colors": [
+        "#28a745",
+        "#dc3545",
+        "#ffc107"
+      ]
+    }
+  },
+  "timeline": [
+    {
+      "time": "",
+      "rule_name": "Disable Root Login",
+      "status": "success",
+      "duration": 1.2,
+      "icon": "\u2713"
+    },
+    {
+      "time": "",
+      "rule_name": "Set Password Max Age",
+      "status": "success",
+      "duration": 0.8,
+      "icon": "\u2713"
+    },
+    {
+      "time": "",
+      "rule_name": "Enable Firewall",
+      "status": "failed",
+      "duration": 0.5,
+      "icon": "\u2717"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "critical",
+      "title": "Address Critical Security Issues",
+      "description": "Found 1 critical security issue(s). These should be addressed immediately as they pose significant security risks."
+    },
+    {
+      "priority": "high",
+      "title": "Resolve High Priority Issues",
+      "description": "Found 1 high priority issue(s). Address these issues as soon as possible."
+    },
+    {
+      "priority": "medium",
+      "title": "Review Failed Hardening Rules",
+      "description": "1 hardening rule(s) failed to apply. Review the errors and attempt to apply these rules manually."
+    }
+  ]
+}

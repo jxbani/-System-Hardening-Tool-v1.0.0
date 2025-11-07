@@ -1,0 +1,15 @@
+{
+  "checkpoint_id": "d7c3a554-98eb-4937-b9e1-3e522b38603a",
+  "description": "Test checkpoint for backup manager",
+  "timestamp": "2025-11-06T22:39:02.646253",
+  "os_type": "Linux",
+  "os_version": "#1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025",
+  "hostname": "DESKTOP-71M10ED",
+  "backed_up_files": [
+    "/etc/hostname",
+    "/etc/hosts"
+  ],
+  "backed_up_registry_keys": [],
+  "status": "completed",
+  "completion_time": "2025-11-06T22:39:02.648460"
+}

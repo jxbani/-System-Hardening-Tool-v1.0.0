@@ -1,0 +1,196 @@
+{
+  "name": "SSH Configuration",
+  "description": "Security hardening rules for SSH server configuration",
+  "category": "Network Services",
+  "applies_to": ["Linux"],
+  "config_file": "/etc/ssh/sshd_config",
+  "checks": [
+    {
+      "id": "ssh_root_login",
+      "name": "Disable Root Login",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "PermitRootLogin",
+      "expected_value": "no",
+      "severity": "critical",
+      "description": "Root login via SSH should be disabled for security",
+      "remediation": "Set 'PermitRootLogin no' in /etc/ssh/sshd_config and restart SSH service",
+      "references": [
+        "CIS Benchmark: 5.2.10",
+        "https://www.ssh.com/academy/ssh/sshd_config"
+      ]
+    },
+    {
+      "id": "ssh_password_auth",
+      "name": "Disable Password Authentication",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "PasswordAuthentication",
+      "expected_value": "no",
+      "severity": "high",
+      "description": "Password authentication should be disabled in favor of key-based authentication",
+      "remediation": "Set 'PasswordAuthentication no' in /etc/ssh/sshd_config after setting up SSH keys",
+      "references": [
+        "CIS Benchmark: 5.2.8"
+      ]
+    },
+    {
+      "id": "ssh_empty_passwords",
+      "name": "Disable Empty Passwords",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "PermitEmptyPasswords",
+      "expected_value": "no",
+      "severity": "critical",
+      "description": "Empty passwords should never be permitted",
+      "remediation": "Set 'PermitEmptyPasswords no' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.9"
+      ]
+    },
+    {
+      "id": "ssh_protocol",
+      "name": "Use SSH Protocol 2",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "Protocol",
+      "expected_value": "2",
+      "severity": "critical",
+      "description": "Only SSH Protocol 2 should be used (Protocol 1 is insecure)",
+      "remediation": "Set 'Protocol 2' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.4"
+      ]
+    },
+    {
+      "id": "ssh_x11_forwarding",
+      "name": "Disable X11 Forwarding",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "X11Forwarding",
+      "expected_value": "no",
+      "severity": "medium",
+      "description": "X11 forwarding should be disabled unless specifically required",
+      "remediation": "Set 'X11Forwarding no' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.6"
+      ]
+    },
+    {
+      "id": "ssh_max_auth_tries",
+      "name": "Limit Authentication Attempts",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "MaxAuthTries",
+      "expected_value": "4",
+      "comparison": "<=",
+      "severity": "medium",
+      "description": "Limit the number of authentication attempts to prevent brute force attacks",
+      "remediation": "Set 'MaxAuthTries 4' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.7"
+      ]
+    },
+    {
+      "id": "ssh_ignore_rhosts",
+      "name": "Ignore Rhosts",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "IgnoreRhosts",
+      "expected_value": "yes",
+      "severity": "high",
+      "description": "SSH should ignore .rhosts and .shosts files",
+      "remediation": "Set 'IgnoreRhosts yes' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.8"
+      ]
+    },
+    {
+      "id": "ssh_host_based_auth",
+      "name": "Disable Host-Based Authentication",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "HostbasedAuthentication",
+      "expected_value": "no",
+      "severity": "high",
+      "description": "Host-based authentication should be disabled",
+      "remediation": "Set 'HostbasedAuthentication no' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.9"
+      ]
+    },
+    {
+      "id": "ssh_permit_user_env",
+      "name": "Disable User Environment",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "PermitUserEnvironment",
+      "expected_value": "no",
+      "severity": "medium",
+      "description": "User environment processing should be disabled",
+      "remediation": "Set 'PermitUserEnvironment no' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.11"
+      ]
+    },
+    {
+      "id": "ssh_ciphers",
+      "name": "Use Strong Ciphers",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "Ciphers",
+      "expected_value": "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr",
+      "severity": "medium",
+      "description": "Only strong ciphers should be used",
+      "remediation": "Set approved cipher list in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.13"
+      ]
+    },
+    {
+      "id": "ssh_client_alive_interval",
+      "name": "Set Client Alive Interval",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "ClientAliveInterval",
+      "expected_value": "300",
+      "comparison": "<=",
+      "severity": "low",
+      "description": "Idle timeout interval should be configured",
+      "remediation": "Set 'ClientAliveInterval 300' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.16"
+      ]
+    },
+    {
+      "id": "ssh_client_alive_count_max",
+      "name": "Set Client Alive Count Max",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "ClientAliveCountMax",
+      "expected_value": "3",
+      "comparison": "<=",
+      "severity": "low",
+      "description": "Maximum number of client alive messages should be set",
+      "remediation": "Set 'ClientAliveCountMax 3' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.16"
+      ]
+    },
+    {
+      "id": "ssh_login_grace_time",
+      "name": "Set Login Grace Time",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "LoginGraceTime",
+      "expected_value": "60",
+      "comparison": "<=",
+      "severity": "low",
+      "description": "Login grace time should be limited",
+      "remediation": "Set 'LoginGraceTime 60' in /etc/ssh/sshd_config",
+      "references": [
+        "CIS Benchmark: 5.2.17"
+      ]
+    },
+    {
+      "id": "ssh_banner",
+      "name": "Configure SSH Banner",
+      "file": "/etc/ssh/sshd_config",
+      "parameter": "Banner",
+      "expected_value": "/etc/issue.net",
+      "severity": "low",
+      "description": "A warning banner should be displayed before login",
+      "remediation": "Set 'Banner /etc/issue.net' in /etc/ssh/sshd_config and create the banner file",
+      "references": [
+        "CIS Benchmark: 5.2.18"
+      ]
+    }
+  ]
+}
