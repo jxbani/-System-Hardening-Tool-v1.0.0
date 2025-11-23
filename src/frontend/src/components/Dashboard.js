@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { getSystemInfo, runScan, checkHealth, applyHardening, generateReport } from '../api/client';
+import MonitoringDashboard from './MonitoringDashboard';
+import CompliancePanel from './CompliancePanel';
+import RemediationPanel from './RemediationPanel';
+import HistoryViewer from './HistoryViewer';
+import RiskDashboard from './RiskDashboard';
 
 function Dashboard() {
   // State management
@@ -11,13 +16,16 @@ function Dashboard() {
     warning: 0,
   });
   const [scanResults, setScanResults] = useState([]);
+  const [fullScanData, setFullScanData] = useState(null); // Store full scan response for reporting
   const [recentActivity, setRecentActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [scanning, setScanning] = useState(false);
   const [fixing, setFixing] = useState(false);
   const [generatingReport, setGeneratingReport] = useState(false);
+  const [reportFormat, setReportFormat] = useState('pdf'); // Selected report format
   const [error, setError] = useState(null);
   const [backendStatus, setBackendStatus] = useState('checking');
+  const [activeView, setActiveView] = useState('dashboard'); // dashboard, monitoring, compliance, remediation
 
   /**
    * Add activity to recent activity list
@@ -77,6 +85,9 @@ function Dashboard() {
 
     try {
       const results = await runScan();
+
+      // Save full scan data for reporting
+      setFullScanData(results);
 
       // Update statistics with scan results
       if (results) {
@@ -163,51 +174,73 @@ function Dashboard() {
    * Handle generate PDF report button click
    */
   const handleGenerateReport = async () => {
+    if (!fullScanData) {
+      setError('Please run a scan first before generating a report');
+      addActivity('Cannot generate report - no scan data available', 'error');
+      return;
+    }
+
     setGeneratingReport(true);
     setError(null);
-    addActivity('Generating PDF report...', 'info');
+
+    const formatNames = {
+      'pdf': 'PDF',
+      'html': 'HTML',
+      'excel': 'Excel',
+      'csv': 'CSV',
+      'docx': 'Word',
+      'markdown': 'Markdown'
+    };
+
+    const formatExtensions = {
+      'pdf': '.pdf',
+      'html': '.html',
+      'excel': '.xlsx',
+      'csv': '.csv',
+      'docx': '.docx',
+      'markdown': '.md'
+    };
+
+    const formatName = formatNames[reportFormat] || reportFormat.toUpperCase();
+    const extension = formatExtensions[reportFormat] || `.${reportFormat}`;
+
+    addActivity(`Generating ${formatName} report...`, 'info');
 
     try {
-      const report = await generateReport({ format: 'pdf' });
+      const blob = await generateReport({
+        format: reportFormat,
+        title: 'System Security Report',
+        scan_results: fullScanData
+      });
 
-      console.log('Report generated:', report);
+      console.log('Report generated successfully');
 
-      addActivity(`PDF report generated: ${report.report_id || 'Unknown'}`, 'success');
+      // Create a download link for the report blob
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `security-report-${new Date().toISOString().split('T')[0]}${extension}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
 
-      // If the backend returns a download URL or data, handle it
-      if (report.download_url) {
-        window.open(report.download_url, '_blank');
-        addActivity('Opening report in new tab', 'info');
-      } else if (report.data) {
-        // Create a blob and download it
-        const blob = new Blob([report.data], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `security-report-${new Date().toISOString().split('T')[0]}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-        addActivity('Report downloaded', 'success');
-      } else {
-        addActivity(`Report ready - ${report.message || 'Check console for details'}`, 'info');
-        console.log('Full report data:', report);
-      }
+      addActivity(`${formatName} report downloaded successfully`, 'success');
     } catch (err) {
       console.error('Error generating report:', err);
       setError(err.message);
-      addActivity('Failed to generate PDF report', 'error');
+      addActivity(`Failed to generate ${formatName} report`, 'error');
     } finally {
       setGeneratingReport(false);
     }
   };
 
   /**
-   * Navigate to a section (placeholder for routing)
+   * Navigate to a section
    */
   const navigateToSection = (section) => {
     console.log(`Navigating to: ${section}`);
+    setActiveView(section.toLowerCase());
     addActivity(`Navigated to ${section}`, 'info');
   };
 
@@ -445,6 +478,33 @@ function Dashboard() {
       marginTop: '20px',
       marginBottom: '20px',
       flexWrap: 'wrap',
+      alignItems: 'center',
+    },
+    formatSelectorContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      padding: '8px 12px',
+      backgroundColor: '#f8f9fa',
+      borderRadius: '8px',
+      border: '1px solid #dee2e6',
+    },
+    formatLabel: {
+      fontSize: '14px',
+      fontWeight: '500',
+      color: '#495057',
+      whiteSpace: 'nowrap',
+    },
+    formatSelect: {
+      padding: '8px 12px',
+      fontSize: '14px',
+      borderRadius: '6px',
+      border: '1px solid #ced4da',
+      backgroundColor: '#ffffff',
+      color: '#495057',
+      cursor: 'pointer',
+      outline: 'none',
+      transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
     },
     scanWarning: {
       marginTop: '12px',
@@ -686,6 +746,30 @@ function Dashboard() {
         </div>
       )}
 
+      {/* Back to Dashboard button when viewing other panels */}
+      {activeView !== 'dashboard' && (
+        <button
+          style={{
+            ...styles.btnPrimary,
+            marginBottom: '20px',
+            width: 'auto',
+          }}
+          onClick={() => setActiveView('dashboard')}
+        >
+          ← Back to Dashboard
+        </button>
+      )}
+
+      {/* Render different views based on activeView state */}
+      {activeView === 'monitoring' && <MonitoringDashboard />}
+      {activeView === 'compliance' && <CompliancePanel />}
+      {activeView === 'remediation' && <RemediationPanel />}
+      {activeView === 'history' && <HistoryViewer />}
+      {activeView === 'risk' && <RiskDashboard />}
+
+      {/* Main Dashboard View */}
+      {activeView === 'dashboard' && (
+      <>
       <div style={styles.dashboardGrid}>
         {/* System Information Card */}
         <div style={styles.card} className="card">
@@ -801,39 +885,47 @@ function Dashboard() {
 
         {/* Navigation Panel */}
         <div style={styles.card} className="card">
-          <h2 style={styles.cardTitle}>Quick Actions</h2>
-          <div style={styles.navButtons}>
+          <h2 style={styles.cardTitle}>Advanced Features</h2>
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px'}}>
             <button
               style={styles.navBtn}
               className="nav-btn"
-              onClick={() => navigateToSection('Hardening')}
+              onClick={() => navigateToSection('monitoring')}
             >
-              <span style={styles.navIcon}>🛡️</span>
-              <span>Apply Hardening</span>
+              <span style={styles.navIcon}>📡</span>
+              <span>Monitoring</span>
             </button>
             <button
               style={styles.navBtn}
               className="nav-btn"
-              onClick={() => navigateToSection('Reports')}
+              onClick={() => navigateToSection('compliance')}
+            >
+              <span style={styles.navIcon}>📋</span>
+              <span>Compliance</span>
+            </button>
+            <button
+              style={styles.navBtn}
+              className="nav-btn"
+              onClick={() => navigateToSection('remediation')}
+            >
+              <span style={styles.navIcon}>🔧</span>
+              <span>Remediation</span>
+            </button>
+            <button
+              style={styles.navBtn}
+              className="nav-btn"
+              onClick={() => navigateToSection('risk')}
+            >
+              <span style={styles.navIcon}>⚠️</span>
+              <span>Risk Analysis</span>
+            </button>
+            <button
+              style={styles.navBtn}
+              className="nav-btn"
+              onClick={() => navigateToSection('history')}
             >
               <span style={styles.navIcon}>📊</span>
-              <span>View Reports</span>
-            </button>
-            <button
-              style={styles.navBtn}
-              className="nav-btn"
-              onClick={() => navigateToSection('Settings')}
-            >
-              <span style={styles.navIcon}>⚙️</span>
-              <span>Settings</span>
-            </button>
-            <button
-              style={styles.navBtn}
-              className="nav-btn"
-              onClick={() => navigateToSection('History')}
-            >
-              <span style={styles.navIcon}>📜</span>
-              <span>Scan History</span>
+              <span>History</span>
             </button>
           </div>
         </div>
@@ -867,6 +959,27 @@ function Dashboard() {
                 )}
               </button>
 
+              {/* Report Format Selector */}
+              <div style={styles.formatSelectorContainer}>
+                <label htmlFor="reportFormat" style={styles.formatLabel}>
+                  Report Format:
+                </label>
+                <select
+                  id="reportFormat"
+                  value={reportFormat}
+                  onChange={(e) => setReportFormat(e.target.value)}
+                  style={styles.formatSelect}
+                  disabled={generatingReport}
+                >
+                  <option value="pdf">PDF</option>
+                  <option value="excel">Excel (.xlsx)</option>
+                  <option value="csv">CSV</option>
+                  <option value="docx">Word (.docx)</option>
+                  <option value="markdown">Markdown (.md)</option>
+                  <option value="html">HTML</option>
+                </select>
+              </div>
+
               <button
                 style={{
                   ...styles.btnWarning,
@@ -882,7 +995,7 @@ function Dashboard() {
                   </>
                 ) : (
                   <>
-                    📄 Generate PDF Report
+                    📄 Generate Report
                   </>
                 )}
               </button>
@@ -925,6 +1038,8 @@ function Dashboard() {
             </table>
           </div>
         </div>
+      )}
+      </>
       )}
     </div>
   );
