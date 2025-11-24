@@ -5,6 +5,7 @@ import CompliancePanel from './CompliancePanel';
 import RemediationPanel from './RemediationPanel';
 import HistoryViewer from './HistoryViewer';
 import RiskDashboard from './RiskDashboard';
+import RemediationWizard from './RemediationWizard';
 
 function Dashboard() {
   // State management
@@ -766,6 +767,7 @@ function Dashboard() {
       {activeView === 'remediation' && <RemediationPanel />}
       {activeView === 'history' && <HistoryViewer />}
       {activeView === 'risk' && <RiskDashboard />}
+      {activeView === 'wizard' && <RemediationWizard />}
 
       {/* Main Dashboard View */}
       {activeView === 'dashboard' && (
@@ -926,6 +928,14 @@ function Dashboard() {
             >
               <span style={styles.navIcon}>📊</span>
               <span>History</span>
+            </button>
+            <button
+              style={styles.navBtn}
+              className="nav-btn"
+              onClick={() => navigateToSection('wizard')}
+            >
+              <span style={styles.navIcon}>🧙</span>
+              <span>Guided Remediation</span>
             </button>
           </div>
         </div>

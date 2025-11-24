@@ -875,3 +875,177 @@ export async function getRiskRecommendations(vulnerabilities) {
     throw new Error(`Failed to get risk recommendations: ${error.message}`);
   }
 }
+
+// ========================
+// Playbook API Functions
+// ========================
+
+/**
+ * Get all available remediation playbooks
+ * @param {string} category - Optional category filter
+ * @returns {Promise} - Playbooks list
+ */
+export async function getPlaybooks(category = null) {
+  try {
+    const params = new URLSearchParams();
+    if (category) {
+      params.append('category', category);
+    }
+
+    const url = `${API_BASE_URL}/playbooks${params.toString() ? '?' + params.toString() : ''}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return await handleResponse(response);
+  } catch (error) {
+    console.error('Error getting playbooks:', error);
+    throw new Error(`Failed to get playbooks: ${error.message}`);
+  }
+}
+
+/**
+ * Get a specific playbook by ID
+ * @param {string} playbookId - Playbook ID
+ * @returns {Promise} - Playbook details
+ */
+export async function getPlaybook(playbookId) {
+  try {
+    const url = `${API_BASE_URL}/playbooks/${playbookId}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return await handleResponse(response);
+  } catch (error) {
+    console.error('Error getting playbook:', error);
+    throw new Error(`Failed to get playbook: ${error.message}`);
+  }
+}
+
+/**
+ * Match a playbook to a vulnerability
+ * @param {Object} vulnerability - Vulnerability object
+ * @returns {Promise} - Matched playbook
+ */
+export async function matchPlaybook(vulnerability) {
+  try {
+    const url = `${API_BASE_URL}/playbooks/match`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ vulnerability }),
+    });
+
+    return await handleResponse(response);
+  } catch (error) {
+    console.error('Error matching playbook:', error);
+    throw new Error(`Failed to match playbook: ${error.message}`);
+  }
+}
+
+/**
+ * Create a remediation plan for vulnerabilities
+ * @param {Array} vulnerabilities - Array of vulnerability objects
+ * @returns {Promise} - Remediation plan
+ */
+export async function createRemediationPlan(vulnerabilities) {
+  try {
+    const url = `${API_BASE_URL}/playbooks/plan`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ vulnerabilities }),
+    });
+
+    return await handleResponse(response);
+  } catch (error) {
+    console.error('Error creating remediation plan:', error);
+    throw new Error(`Failed to create remediation plan: ${error.message}`);
+  }
+}
+
+/**
+ * Estimate remediation effort for vulnerabilities
+ * @param {Array} vulnerabilities - Array of vulnerability objects
+ * @returns {Promise} - Effort estimate
+ */
+export async function estimateRemediationEffort(vulnerabilities) {
+  try {
+    const url = `${API_BASE_URL}/playbooks/estimate`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ vulnerabilities }),
+    });
+
+    return await handleResponse(response);
+  } catch (error) {
+    console.error('Error estimating remediation effort:', error);
+    throw new Error(`Failed to estimate remediation effort: ${error.message}`);
+  }
+}
+
+/**
+ * Get playbook execution history
+ * @param {number} limit - Optional limit
+ * @param {number} offset - Optional offset
+ * @returns {Promise} - Execution history
+ */
+export async function getPlaybookExecutions(limit = null, offset = 0) {
+  try {
+    const params = new URLSearchParams();
+    if (limit) {
+      params.append('limit', limit);
+    }
+    if (offset) {
+      params.append('offset', offset);
+    }
+
+    const url = `${API_BASE_URL}/playbooks/executions${params.toString() ? '?' + params.toString() : ''}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return await handleResponse(response);
+  } catch (error) {
+    console.error('Error getting playbook executions:', error);
+    throw new Error(`Failed to get playbook executions: ${error.message}`);
+  }
+}
+
+/**
+ * Get playbook execution metrics
+ * @returns {Promise} - Execution metrics
+ */
+export async function getPlaybookMetrics() {
+  try {
+    const url = `${API_BASE_URL}/playbooks/metrics`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return await handleResponse(response);
+  } catch (error) {
+    console.error('Error getting playbook metrics:', error);
+    throw new Error(`Failed to get playbook metrics: ${error.message}`);
+  }
+}

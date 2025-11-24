@@ -1,433 +1,650 @@
-# System Hardening Tool
+# 🛡️ System Hardening Tool
 
-A comprehensive security hardening and vulnerability assessment tool with a professional web-based dashboard.
+<div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Python](https://img.shields.io/badge/python-3.8+-green)
-![React](https://img.shields.io/badge/react-18.2-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+![Security](https://img.shields.io/badge/Security-Hardening-blue)
+![Python](https://img.shields.io/badge/Python-3.8+-green)
+![React](https://img.shields.io/badge/React-18.2-blue)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Status](https://img.shields.io/badge/Status-Production-success)
 
-## Features
+**Enterprise-grade automated security assessment and system hardening platform with cybersecurity-themed UI**
 
-✅ **Security Scanning**: Automated vulnerability detection and security assessment
-✅ **System Hardening**: Apply security fixes and hardening configurations
-✅ **Real-time Dashboard**: Professional React-based UI with live updates
-✅ **PDF Reports**: Generate detailed security reports
-✅ **System Monitoring**: Track CPU, memory, and disk usage
-✅ **Activity Logging**: Real-time activity feed with color-coded status indicators
+[Features](#-features) • [Quick Start](#-quick-start) • [Screenshots](#-screenshots) • [API Docs](#-api-documentation)
 
-## Tech Stack
-
-### Backend
-- Python 3.8+
-- Flask (REST API)
-- psutil (System monitoring)
-- Flask-CORS (Cross-origin support)
-
-### Frontend
-- React 18
-- Axios (HTTP client)
-- Modern inline CSS styling
-- Responsive design
-
-## Prerequisites
-
-### Linux
-- Python 3.8 or higher
-- Node.js 14+ and npm
-- pip (Python package manager)
-- Git
-
-### Windows 11
-- Python 3.8 or higher ([Download](https://www.python.org/downloads/))
-- Node.js 14+ and npm ([Download](https://nodejs.org/))
-- Git ([Download](https://git-scm.com/download/win))
+</div>
 
 ---
 
-## Installation & Setup
+## 📋 Overview
 
-### 📥 Linux Installation
+The **System Hardening Tool** is a comprehensive, production-ready security platform that automates vulnerability detection, risk assessment, compliance checking, and guided remediation for Linux systems. Built with modern technologies (React + Flask + SQLAlchemy), it features a professional cybersecurity-themed dark mode interface, real-time monitoring, historical tracking, and intelligent remediation playbooks.
 
-#### 1. Clone the Repository
+### 🎯 Key Capabilities
+
+- **🔍 Automated Security Scanning** - Multi-dimensional vulnerability detection
+- **⚠️ Advanced Risk Scoring** - CVSS-inspired 3-component risk assessment
+- **📊 Historical Tracking** - Trend analysis with SQLite database
+- **🧙 Guided Remediation** - Step-by-step playbook-based fixes
+- **📈 Compliance Frameworks** - CIS, PCI-DSS, HIPAA, SOC 2 support
+- **🎨 Cybersecurity UI Theme** - Professional dark mode with Matrix aesthetics
+- **📡 Real-time Monitoring** - Live system metrics and process tracking
+- **📁 Multi-Format Reports** - PDF, HTML, JSON, CSV exports
+
+---
+
+## ✨ Features
+
+### 🔒 Security Scanning
+- **Network Security Analysis**: SSH configuration, firewall rules, open ports
+- **File System Auditing**: Permission checks, world-writable files, SUID/SGID detection
+- **System Updates**: Package vulnerability scanning, outdated software identification
+- **Service Hardening**: Configuration assessment, unnecessary service detection
+- **Compliance Validation**: Multi-framework compliance checking
+
+### ⚠️ Risk Assessment Engine
+- **Three-Component Scoring**: Base score (severity × exploitability), Temporal factors, Environmental impact
+- **Intelligent Prioritization**: Automatic vulnerability ranking by calculated risk
+- **Distribution Analytics**: Visual risk distribution across categories
+- **Trend Tracking**: Historical risk score progression with time-series graphs
+- **Impact Prediction**: Estimated risk reduction calculations
+
+### 🧙 Guided Remediation
+- **4 Pre-built Playbooks**:
+  1. **SSH Hardening** - Disable password auth, enforce key-based access
+  2. **System Updates** - Automated package updates with validation
+  3. **Permission Fixes** - Correct insecure file permissions
+  4. **Firewall Setup** - UFW configuration with secure defaults
+- **Phased Plans**: Priority-based execution (Critical → High → Medium → Low)
+- **Validation Framework**: Post-remediation verification steps
+- **Rollback Support**: Automatic rollback on validation failure
+
+### 📊 Historical Data & Analytics
+- **Scan History**: Complete record of all security assessments
+- **Trend Visualization**: Line charts for vulnerabilities, compliance, risk scores
+- **Comparative Analysis**: Before/after comparisons for remediation impact
+- **SQLite Database**: Persistent storage with efficient querying
+- **Execution Metrics**: Success rates, time-to-fix, risk reduction stats
+
+### 📡 Real-time Monitoring
+- **System Metrics**: CPU, memory, disk, network utilization
+- **Process Management**: Top processes, resource hogs identification
+- **Live Updates**: Auto-refresh monitoring dashboard
+- **Alert Thresholds**: Configurable warnings for resource limits
+
+### 📈 Compliance Management
+- **Framework Support**: CIS Benchmarks, PCI-DSS, HIPAA, SOC 2, GDPR
+- **Automated Checks**: Rule-based compliance validation
+- **Scoring System**: Percentage-based compliance scoring
+- **Gap Analysis**: Identify non-compliant configurations
+- **Remediation Mapping**: Direct links to fix procedures
+
+### 📁 Report Generation
+- **PDF Reports**: Professional formatted documents with charts
+- **HTML Exports**: Web-viewable reports with interactive elements
+- **JSON/CSV**: Machine-readable exports for SIEM integration
+- **Email Delivery**: Automated report distribution
+- **Custom Templates**: Configurable report layouts
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Python 3.8+** (Backend runtime)
+- **Node.js 14+** (Frontend development)
+- **pip & npm** (Package managers)
+- **Linux OS** (Native or WSL2)
+- **4GB RAM** minimum (8GB recommended)
+
+### Installation Steps
+
 ```bash
-git clone https://github.com/YOUR_USERNAME/system-hardening-tool.git
+# 1. Clone Repository
+git clone https://github.com/yourusername/system-hardening-tool.git
 cd system-hardening-tool
-```
 
-#### 2. Backend Setup
-```bash
-# Navigate to backend directory
+# 2. Backend Setup
 cd src/backend
-
-# Create virtual environment
 python3 -m venv venv
-
-# Activate virtual environment
-source venv/bin/activate
-
-# Install dependencies
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-```
 
-#### 3. Frontend Setup
-```bash
-# Navigate to frontend directory (from project root)
-cd ../../src/frontend
-
-# Install dependencies
+# 3. Frontend Setup
+cd ../frontend
 npm install
-```
 
-#### 4. Run the Application
-
-**Terminal 1 - Start Backend:**
-```bash
+# 4. Start Backend (Terminal 1)
 cd src/backend
 source venv/bin/activate
 python app.py
-```
+# Server running on http://localhost:5000
 
-You should see:
-```
-* Running on http://127.0.0.1:5000
-```
-
-**Terminal 2 - Start Frontend:**
-```bash
+# 5. Start Frontend (Terminal 2)
 cd src/frontend
 npm start
+# Opens browser at http://localhost:3000
 ```
 
-Browser will automatically open to http://localhost:3000
+### First Run
 
-#### 5. Access the Dashboard
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000
+1. **Access Dashboard**: Navigate to http://localhost:3000
+2. **Wait for Connection**: Green "Connected" status indicator
+3. **Run Initial Scan**: Click "Start Security Scan" button
+4. **Explore Features**:
+   - View scan results in the dashboard
+   - Check Risk Analysis for prioritization
+   - Browse History for trend analysis
+   - Try Guided Remediation wizard
+   - Review Compliance scores
 
 ---
 
-### 💻 Windows 11 Installation
+## 🎨 Cybersecurity Theme
 
-#### 1. Clone the Repository
-Open PowerShell or Command Prompt:
-```powershell
-git clone https://github.com/YOUR_USERNAME/system-hardening-tool.git
-cd system-hardening-tool
+The application features a **professional dark mode interface** with:
+
+- **Color Scheme**: Cyber blue (#00d9ff), purple (#b24bf3), matrix green (#00ff41)
+- **Dark Backgrounds**: Reduced eye strain, professional appearance
+- **Gradient Effects**: Smooth transitions, glowing borders
+- **Hover Animations**: Interactive feedback, modern UX
+- **Neon Accents**: Critical information highlighting
+- **Custom Scrollbars**: Themed with gradient effects
+- **Cyber Typography**: Uppercase headers, gradient text
+
+### Theme Components
+
+```css
+/* Cybersecurity color palette */
+--cyber-dark: #0a0e27
+--cyber-blue: #00d9ff
+--cyber-purple: #b24bf3
+--cyber-green: #00ff41
+--cyber-red: #ff0055
 ```
-
-#### 2. Backend Setup
-```powershell
-# Navigate to backend directory
-cd src\backend
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-#### 3. Frontend Setup
-```powershell
-# Navigate to frontend directory (from project root)
-cd ..\..\src\frontend
-
-# Install dependencies
-npm install
-```
-
-#### 4. Run the Application
-
-**Command Prompt/PowerShell Window 1 - Start Backend:**
-```powershell
-cd src\backend
-venv\Scripts\activate
-python app.py
-```
-
-You should see:
-```
-* Running on http://127.0.0.1:5000
-```
-
-**Command Prompt/PowerShell Window 2 - Start Frontend:**
-```powershell
-cd src\frontend
-npm start
-```
-
-Browser will automatically open to http://localhost:3000
-
-#### 5. Access the Dashboard
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000
 
 ---
 
-## 📖 Usage Guide
+## 🏗️ Architecture
 
-### Running a Security Scan
+### Technology Stack
 
-1. Open the dashboard at http://localhost:3000
-2. Wait for backend connection (green "connected" indicator)
-3. Click **"Start Security Scan"** button
-4. View results in the scan results table
+**Backend:**
+- **Flask 2.3.2** - Lightweight web framework
+- **SQLAlchemy 2.0.44** - ORM for database operations
+- **psutil 5.9.5** - System and process monitoring
+- **ReportLab 4.0.4** - PDF report generation
+- **APScheduler 3.10.1** - Background task scheduling
 
-### Applying Security Fixes
+**Frontend:**
+- **React 18.2** - Component-based UI framework
+- **Chart.js 4.4.0** - Data visualization library
+- **Fetch API** - Modern HTTP client
+- **CSS-in-JS** - Cybersecurity theme styling
 
-1. Run a security scan first
-2. Review vulnerabilities in the results table
-3. Click **"🛠️ Fix Vulnerabilities"** button
-4. Monitor progress in Recent Activity panel
-5. Run a new scan to verify fixes applied
+**Database:**
+- **SQLite** - Embedded relational database
 
-### Generating PDF Reports
+### System Architecture
 
-1. After running a scan, click **"📄 Generate PDF Report"**
-2. Check Recent Activity panel for confirmation
-3. View report details in browser console (F12)
+```
+┌─────────────────┐         ┌──────────────────┐         ┌─────────────────┐
+│                 │   API   │                  │   ORM   │                 │
+│  React Frontend ├────────►│  Flask Backend   ├────────►│ SQLite Database │
+│   (Port 3000)   │  JSON   │   (Port 5000)    │  Query  │  (Persistent)   │
+│                 │         │                  │         │                 │
+└─────────────────┘         └────────┬─────────┘         └─────────────────┘
+                                     │
+                     ┌───────────────┼───────────────┬──────────────┐
+                     │               │               │              │
+            ┌────────▼────────┐ ┌───▼────────┐ ┌───▼──────────┐ ┌─▼────────┐
+            │ Security Scanner│ │ Risk Scorer│ │Playbook Engine│ │ Monitor  │
+            └─────────────────┘ └────────────┘ └───────────────┘ └──────────┘
+```
 
-### Dashboard Features
-
-**System Information Card**:
-- Operating System and version
-- Hostname and architecture
-- Real-time CPU usage %
-- Real-time Memory usage %
-- Real-time Disk usage %
-
-**Security Overview Card**:
-- Total vulnerabilities count
-- Compliance score percentage
-- Critical issues count
-- Warnings count
-
-**Recent Activity Panel**:
-- Real-time activity log
-- Color-coded status (info/success/error)
-- Timestamp for each activity
-
----
-
-## 📁 Project Structure
+### Project Structure
 
 ```
 system-hardening-tool/
 ├── src/
 │   ├── backend/
-│   │   ├── app.py                  # Flask API server
-│   │   ├── requirements.txt        # Python dependencies
-│   │   ├── venv/                   # Virtual environment (gitignored)
-│   │   └── .env                    # Environment variables
+│   │   ├── app.py                          # Flask application
+│   │   ├── modules/
+│   │   │   ├── scanner.py                  # Vulnerability scanner
+│   │   │   ├── risk_scoring.py             # Risk assessment engine
+│   │   │   ├── database_models.py          # SQLAlchemy ORM models
+│   │   │   ├── remediation_playbooks.py    # Playbook automation
+│   │   │   ├── compliance_frameworks.py    # Compliance checker
+│   │   │   ├── realtime_monitor.py         # System monitoring
+│   │   │   ├── auto_remediation.py         # Automated fixes
+│   │   │   ├── report_generator.py         # Report creation
+│   │   │   ├── export_formats.py           # Export handlers
+│   │   │   └── email_service.py            # Email delivery
+│   │   ├── requirements.txt
+│   │   └── venv/                           # Virtual environment
+│   │
 │   └── frontend/
 │       ├── src/
 │       │   ├── components/
-│       │   │   └── Dashboard.js    # Main dashboard component
+│       │   │   ├── Dashboard.js            # Main dashboard
+│       │   │   ├── RiskDashboard.js        # Risk analysis
+│       │   │   ├── HistoryViewer.js        # Historical data
+│       │   │   ├── RemediationWizard.js    # Guided remediation
+│       │   │   ├── MonitoringDashboard.js  # Real-time monitor
+│       │   │   ├── CompliancePanel.js      # Compliance view
+│       │   │   └── RemediationPanel.js     # Auto-remediation
 │       │   ├── api/
-│       │   │   └── client.js       # API client
-│       │   ├── App.js             # Main App component
-│       │   └── index.js           # Entry point
-│       ├── package.json           # Node dependencies
-│       ├── node_modules/          # Dependencies (gitignored)
-│       └── public/                # Static files
-├── logs/                          # Application logs
-├── .gitignore                     # Git ignore rules
-└── README.md                      # This file
+│       │   │   └── client.js               # API client (40+ functions)
+│       │   ├── CyberTheme.css              # Cybersecurity theme
+│       │   ├── index.js
+│       │   └── App.js
+│       ├── package.json
+│       └── node_modules/
+│
+├── data/
+│   └── hardening_tool.db                   # SQLite database
+├── reports/                                 # Generated reports
+├── logs/                                    # Application logs
+├── config/
+│   └── templates/                           # Report templates
+└── README.md
 ```
 
 ---
 
-## 🔌 API Endpoints
+## 📚 API Documentation
 
-### Health Check
-```
-GET /api/health
-```
-Returns API status and version
+### Security Scanning
 
-### System Information
-```
-GET /api/system-info
-```
-Returns detailed system metrics (CPU, RAM, disk, etc.)
-
-### Security Scan
-```
+```http
 POST /api/scan
-Body: { "type": "full" } (optional)
-```
-Runs vulnerability assessment and returns findings
+Content-Type: application/json
 
-### Apply Hardening
-```
-POST /api/harden
-Body: { "rules": ["rule1", "rule2"], "dry_run": true }
-```
-Applies security fixes based on scan results
+{
+  "scan_type": "full"  # Options: full, quick, network, filesystem
+}
 
-### Generate Report
+Response: {
+  "scan_id": "scan_20251124_123456",
+  "status": "completed",
+  "totalVulnerabilities": 15,
+  "complianceScore": 78,
+  "criticalIssues": 3,
+  "findings": [...]
+}
 ```
-POST /api/report
-Body: { "format": "pdf" }
+
+### Historical Data
+
+```http
+# Get scan history
+GET /api/history/scans?limit=20&offset=0
+
+# Get specific scan
+GET /api/history/scan/{scan_id}
+
+# Get vulnerability trends
+GET /api/history/trends?days=30
+
+# Get statistics
+GET /api/history/statistics
 ```
-Generates security report in specified format
+
+### Risk Assessment
+
+```http
+# Get risk trends
+GET /api/risk/trends?days=30
+
+# Get risk distribution
+GET /api/risk/distribution
+
+# Get high-risk vulnerabilities
+GET /api/risk/high-risk?limit=10
+
+# Get risk recommendations
+POST /api/risk/recommendations
+Body: { "vulnerabilities": [...] }
+```
+
+### Guided Remediation
+
+```http
+# List playbooks
+GET /api/playbooks?category=Network Security
+
+# Get specific playbook
+GET /api/playbooks/{playbook_id}
+
+# Match playbook to vulnerability
+POST /api/playbooks/match
+Body: { "vulnerability": {...} }
+
+# Create remediation plan
+POST /api/playbooks/plan
+Body: { "vulnerabilities": [...] }
+
+# Estimate effort
+POST /api/playbooks/estimate
+Body: { "vulnerabilities": [...] }
+
+# Get execution history
+GET /api/playbooks/executions?limit=10
+
+# Get metrics
+GET /api/playbooks/metrics
+```
+
+### Real-time Monitoring
+
+```http
+# Start monitoring
+POST /api/monitoring/start
+
+# Stop monitoring
+POST /api/monitoring/stop
+
+# Get metrics
+GET /api/monitoring/metrics
+
+# Get processes
+GET /api/monitoring/processes?limit=10
+```
+
+### Compliance
+
+```http
+# List frameworks
+GET /api/compliance/frameworks
+
+# Check compliance
+POST /api/compliance/check
+Body: { "framework": "CIS" }
+
+# Get compliance report
+GET /api/compliance/report/{framework}
+```
+
+### Report Generation
+
+```http
+# Generate report
+POST /api/report/generate
+Body: {
+  "format": "pdf",  # pdf, html, json, csv
+  "scan_id": "scan_20251124_123456"
+}
+
+# List reports
+GET /api/reports/list
+
+# Email report
+POST /api/report/email
+Body: {
+  "report_id": "report_123",
+  "recipients": ["admin@example.com"]
+}
+```
+
+---
+
+## 🖼️ Screenshots
+
+### Main Dashboard
+Professional dark theme with real-time statistics and navigation.
+
+### Risk Analysis Dashboard
+Risk gauge, distribution charts, and trend visualization.
+
+### Guided Remediation Wizard
+3-step wizard: Select vulnerabilities → Review plan → Execute.
+
+### History Viewer
+Historical trends with interactive charts and scan comparisons.
+
+---
+
+## 🧪 Testing
+
+### Comprehensive Function Test
+
+```bash
+# Test health check
+curl http://localhost:5000/api/health
+
+# Test security scan
+curl -X POST http://localhost:5000/api/scan \
+  -H "Content-Type: application/json" \
+  -d '{"scan_type": "full"}'
+
+# Test risk analysis
+curl http://localhost:5000/api/risk/distribution
+
+# Test playbooks
+curl http://localhost:5000/api/playbooks
+
+# Test compliance
+curl -X POST http://localhost:5000/api/compliance/check \
+  -H "Content-Type: application/json" \
+  -d '{"framework": "CIS"}'
+```
+
+### Automated Testing
+
+```bash
+# Backend unit tests
+cd src/backend
+python -m pytest tests/
+
+# Frontend component tests
+cd src/frontend
+npm test
+```
+
+---
+
+## 📊 Database Schema
+
+### Tables Overview
+
+**scans** - Security assessment records
+- Stores scan metadata, metrics, risk scores
+- Links to vulnerabilities via one-to-many relationship
+
+**vulnerabilities** - Individual security findings
+- Details for each detected vulnerability
+- Risk scoring data and remediation status
+
+**hardening_sessions** - Remediation executions
+- Tracks applied fixes and configurations
+- Links to related scans
+
+**remediation_executions** - Playbook runs
+- Execution steps, validation results
+- Before/after risk scores
+
+**system_snapshots** - State comparisons
+- System configuration snapshots
+- Used for before/after analysis
 
 ---
 
 ## ⚙️ Configuration
 
-### Backend Configuration (.env)
-Create `.env` file in `src/backend/`:
+### Backend (.env file)
+
 ```env
+# Server Settings
+FLASK_ENV=production
 DEBUG=False
+HOST=0.0.0.0
 PORT=5000
-ALLOWED_ORIGINS=*
+
+# Database
+DATABASE_PATH=data/hardening_tool.db
+
+# Reports
+REPORT_OUTPUT_DIR=reports/
+TEMPLATE_DIR=config/templates/
+
+# Email (Optional)
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-app-password
+MAIL_DEFAULT_SENDER=security@yourdomain.com
+
+# Monitoring
+MONITORING_INTERVAL=5
+ALERT_THRESHOLD_CPU=80
+ALERT_THRESHOLD_MEMORY=85
 ```
 
-### Frontend Configuration
-Frontend automatically proxies to backend (configured in `package.json`)
+### Frontend (src/api/client.js)
+
+```javascript
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+```
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Backend Won't Start
+### Backend Issues
 
-**Issue**: `ModuleNotFoundError` or import errors
-**Solution**:
+**Port already in use:**
 ```bash
-source venv/bin/activate  # Linux
-venv\Scripts\activate     # Windows
+# Find process on port 5000
+lsof -i :5000
+kill -9 <PID>
+```
+
+**Module not found:**
+```bash
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-**Issue**: Port 5000 already in use
-**Solution**: Change port in `.env` file or stop conflicting service
-
-### Frontend Won't Start
-
-**Issue**: `EADDRINUSE` port 3000
-**Solution**: Stop other apps using port 3000 or set different port:
+**Database errors:**
 ```bash
-PORT=3001 npm start  # Linux
-set PORT=3001 && npm start  # Windows
+# Reset database
+rm data/hardening_tool.db
+# Restart backend - tables auto-create
 ```
 
-**Issue**: Dependency errors
-**Solution**:
+### Frontend Issues
+
+**Compilation errors:**
 ```bash
-rm -rf node_modules package-lock.json  # Linux
-rmdir /s node_modules && del package-lock.json  # Windows
+rm -rf node_modules package-lock.json
 npm install
 ```
 
-### Backend Status Shows "Disconnected"
-
-1. Verify backend is running on port 5000
-2. Check browser console (F12) for CORS errors
-3. Ensure no firewall blocking localhost:5000
-4. Try refreshing the page
-
-### Scan Button is Disabled
-
-1. Wait for backend status to show "connected"
-2. Check backend terminal for errors
-3. Refresh the browser page
-4. Verify backend logs: `logs/app.log`
+**API connection failed:**
+- Verify backend is running on port 5000
+- Check browser console for CORS errors
+- Ensure no firewall blocking localhost
 
 ---
 
-## 🔒 Security Notes
+## 🔒 Security Considerations
 
-⚠️ **Important**:
-- This tool is for authorized security testing only
-- Requires appropriate permissions for system-level operations
-- Do not use on production systems without proper authorization
-- Always review hardening changes before applying
-- Keep backups of system configurations
+### Production Deployment
 
----
+⚠️ **Important Security Measures:**
 
-## 🛠️ Development
+1. **Authentication**: Implement JWT or OAuth2
+2. **HTTPS**: Enable TLS/SSL encryption
+3. **RBAC**: Add role-based access control
+4. **Rate Limiting**: Prevent API abuse
+5. **Input Validation**: Sanitize all user inputs
+6. **Secure Storage**: Encrypt sensitive data
+7. **Audit Logging**: Track all security actions
 
-### Adding New Features
+### Data Privacy
 
-**Backend** - Add endpoints in `src/backend/app.py`:
-```python
-@app.route('/api/new-endpoint', methods=['POST'])
-def new_feature():
-    # Your code here
-    return jsonify({"status": "success"})
-```
-
-**Frontend** - Update API client in `src/frontend/src/api/client.js`:
-```javascript
-export async function newFeature() {
-    const response = await fetch(`${API_BASE_URL}/new-endpoint`, {
-        method: 'POST'
-    });
-    return await handleResponse(response);
-}
-```
-
-### Testing
-
-- **Backend logs**: `logs/app.log`
-- **Frontend console**: Browser DevTools (F12)
-- **Network requests**: Browser Network tab (F12)
-
----
-
-## 🗺️ Roadmap
-
-- [ ] Real vulnerability scanning engine
-- [ ] Actual PDF generation with reportlab
-- [ ] User authentication system
-- [ ] Scheduled automated scans
-- [ ] Email notifications
-- [ ] Multi-system support
-- [ ] Custom hardening policies
-- [ ] Compliance frameworks (CIS, NIST, PCI-DSS)
-- [ ] Historical scan data and trending
-- [ ] Export to CSV/JSON formats
-
----
-
-## 📝 License
-
-MIT License - See LICENSE file for details
+- Scan results contain sensitive system information
+- Store database securely (encrypted filesystem recommended)
+- Restrict access to reports directory
+- Use environment variables for credentials
+- Never commit secrets to version control
 
 ---
 
 ## 🤝 Contributing
 
+Contributions welcome! Please follow these guidelines:
+
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Follow code style (PEP 8 for Python, ESLint for JavaScript)
+4. Add tests for new features
+5. Update documentation
+6. Commit changes (`git commit -m 'Add amazing feature'`)
+7. Push to branch (`git push origin feature/amazing-feature`)
+8. Open Pull Request
 
 ---
 
-## 💬 Support
+## 📝 License
 
-For issues and questions:
-- 📫 Open an issue on GitHub
-- 📚 Check existing issues for solutions
-- 📋 Review logs in `logs/app.log`
+MIT License - see [LICENSE](LICENSE) file
 
----
+```
+Copyright (c) 2025 System Hardening Tool Contributors
 
-## 📜 Credits
-
-Generated with **Claude Code** - AI-powered development assistant
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software...
+```
 
 ---
 
-**Version**: 1.0.0
-**Last Updated**: November 2025
-**Maintainer**: [Your Name]
+## 🗺️ Roadmap
+
+### Planned Features
+
+- [ ] **Multi-user support** with authentication
+- [ ] **Scheduled scanning** with cron integration
+- [ ] **Container security** (Docker, Kubernetes)
+- [ ] **Cloud platform support** (AWS, Azure, GCP)
+- [ ] **SIEM integration** (Splunk, ELK)
+- [ ] **Advanced playbook editor** with drag-drop
+- [ ] **Machine learning** for anomaly detection
+- [ ] **Mobile app** for monitoring
+- [ ] **Distributed scanning** for multiple systems
+- [ ] **API rate limiting** and throttling
+
+---
+
+## 📧 Support
+
+- **Issues**: [GitHub Issues](https://github.com/yourusername/system-hardening-tool/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/system-hardening-tool/discussions)
+- **Email**: support@yourdomain.com
+- **Documentation**: Full docs available in `/docs` directory
+
+---
+
+## 🙏 Acknowledgments
+
+- **CVSS** - Vulnerability scoring methodology
+- **CIS Benchmarks** - Security configuration standards
+- **OWASP** - Security best practices
+- **Chart.js** - Data visualization
+- **Flask** & **React** - Excellent frameworks
+- **Claude Code** - AI-powered development
+
+---
+
+<div align="center">
+
+**🛡️ Securing Systems, One Scan at a Time 🛡️**
+
+Version 2.0.0 | Last Updated: November 2025
+
+⭐ **Star this repo if you find it useful!** ⭐
+
+[⬆ Back to Top](#-system-hardening-tool)
+
+</div>
