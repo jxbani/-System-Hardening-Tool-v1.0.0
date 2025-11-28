@@ -633,7 +633,6 @@ of this software...
 - **OWASP** - Security best practices
 - **Chart.js** - Data visualization
 - **Flask** & **React** - Excellent frameworks
-- **Claude Code** - AI-powered development
 
 ---
 
