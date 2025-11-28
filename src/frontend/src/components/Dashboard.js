@@ -720,7 +720,7 @@ function Dashboard() {
       </style>
 
       <div style={styles.dashboardHeader}>
-        <h1 style={styles.headerTitle}>Security Dashboard</h1>
+        <h1 style={styles.headerTitle}>IronGuard OS - Security Dashboard</h1>
         <div style={styles.backendStatus}>
           <span style={{
             ...styles.statusIndicator,

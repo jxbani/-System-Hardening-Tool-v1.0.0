@@ -47,7 +47,10 @@ function startFlaskBackend() {
     console.log('Starting Flask backend...');
 
     // Determine the Python executable and backend path
-    const pythonExecutable = process.platform === 'win32' ? 'python' : 'python3';
+    const venvPython = process.platform === 'win32'
+      ? path.join(__dirname, 'src', 'backend', 'venv', 'Scripts', 'python.exe')
+      : path.join(__dirname, 'src', 'backend', 'venv', 'bin', 'python');
+    const pythonExecutable = venvPython;
     const backendPath = path.join(__dirname, 'src', 'backend', 'app.py');
 
     // Check if Flask backend exists

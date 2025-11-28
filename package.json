@@ -53,8 +53,8 @@
     "npm": ">=8.0.0"
   },
   "build": {
-    "appId": "com.systemhardening.tool",
-    "productName": "System Hardening Tool",
+    "appId": "com.ironguard.os",
+    "productName": "IronGuard OS",
     "directories": {
       "buildResources": "assets",
       "output": "dist"
