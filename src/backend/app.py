@@ -6,6 +6,7 @@ Main Flask application with REST API endpoints for system security hardening.
 
 import os
 import logging
+import random
 from datetime import datetime
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
@@ -148,13 +149,16 @@ def scan_system():
         scan_type = data.get('type', 'full')
 
         # Mock scan results with realistic data
+        # Generate random compliance score between 70 and 90
+        compliance_score = round(random.uniform(70.0, 90.0), 1)
+
         scan_results = {
             "scan_id": f"scan_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
             "scan_type": scan_type,
             "timestamp": datetime.now().isoformat(),
             "status": "completed",
             "totalVulnerabilities": 3,
-            "complianceScore": 78,
+            "complianceScore": compliance_score,
             "criticalIssues": 1,
             "warnings": 2,
             "findings": [

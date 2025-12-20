@@ -1,0 +1,3 @@
+title,severity,description,category,remediation
+Outdated Packages,medium,3 packages require security updates,System Updates,Run apt update && apt upgrade
+Unnecessary Services Running,low,One unnecessary service is still running,Services,Review and disable unnecessary service
