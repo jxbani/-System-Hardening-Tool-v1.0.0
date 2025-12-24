@@ -1,0 +1,566 @@
+{
+  "meta": {
+    "project": "System Hardening Tool",
+    "date": "2025-12-22",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "The System Hardening Tool is an enterprise-grade automated security assessment and system hardening platform designed to help organizations secure their Linux and Windows systems through comprehensive vulnerability detection, risk assessment, compliance checking, and guided remediation. It features a cybersecurity-themed dark UI and supports real-time monitoring, historical tracking, and multi-format reporting to enable proactive security management and compliance adherence.",
+  "core_goals": [
+    "Automate and simplify multi-dimensional vulnerability detection across network, filesystem, and system updates.",
+    "Provide a comprehensive risk assessment scoring system with clear prioritization of vulnerabilities.",
+    "Enable compliance management across major frameworks such as CIS, PCI-DSS, HIPAA, SOC 2, and GDPR.",
+    "Offer guided remediation with pre-built playbooks, validation, and rollback capabilities to ensure successful system hardening.",
+    "Deliver real-time system monitoring with live metrics and alerting to maintain situational awareness.",
+    "Maintain historical tracking of scans, risk trends, and remediation history for audit and analysis.",
+    "Support multi-format report generation and email delivery to facilitate communication and documentation.",
+    "Ensure a professional, intuitive user interface with cybersecurity dark theme and interactive visualizations."
+  ],
+  "key_features": [
+    "Security Scanning with support for full, quick, network-only, and filesystem-only scans detecting vulnerabilities like SSH misconfigurations and outdated packages.",
+    "Risk Assessment implementing a CVSS-inspired, three-component risk scoring model including base, temporal, and environmental factors.",
+    "Compliance Management covering multiple industry frameworks with compliance score calculation and gap identification.",
+    "Guided Remediation via playbook-based automation with prioritized execution, validation, and rollback.",
+    "Real-time Monitoring showing CPU, memory, disk, and network metrics updated every 5 seconds with process listings and alerts.",
+    "Historical Tracking maintaining persistent scan data, trend analysis, and side-by-side scan comparisons.",
+    "Report Generation supporting PDF, HTML, JSON, CSV, Excel, and Word formats with embedded charts and recommendations, plus email notifications.",
+    "User Interface featuring a cybersecurity dark theme with cyber blue, purple, and matrix green accents, fast load times, and interactive charts."
+  ],
+  "user_flow_summary": [
+    "User logs in and accesses the Dashboard to initiate a security scan or review current system status.",
+    "User starts a scan choosing scan type (full, quick, network-only, filesystem-only) and views scan results categorized by severity.",
+    "User navigates to the Risk Dashboard to analyze vulnerability risk scores and trends with visual charts.",
+    "User selects a compliance framework in the Compliance Panel and runs compliance checks with detailed report generation.",
+    "User employs the Remediation Wizard to select vulnerabilities, review remediation plans based on playbooks, and execute fixes with progress tracking and automatic rollback on failure.",
+    "User monitors real-time system metrics through the Monitoring Dashboard with alerts and sortable process lists.",
+    "User reviews historical scan data and remediation history in History Viewer to analyze trends and compare past scans.",
+    "User generates multi-format reports from scan data and sends report emails to stakeholders from the dashboard."
+  ],
+  "validation_criteria": [
+    "Users can successfully initiate and complete security scans within defined time limits, with categorized and persistent results.",
+    "Risk scores accurately reflect vulnerability severity and trends are displayed with clear visual highlights for high-risk items.",
+    "Compliance checks correctly assess frameworks with compliance scores and detailed gap analysis reports.",
+    "Guided remediation workflow supports selection, planning, execution with status updates, validation, and rollback on failure.",
+    "Real-time monitoring updates metrics every 5 seconds with alert thresholds triggering visible indicators and sortable process lists.",
+    "Historical data is stored persistently with trends and scan comparisons available to users.",
+    "Reports are generated in all supported formats with embedded visualizations and can be emailed with attachments.",
+    "The user interface consistently applies the cybersecurity dark theme, loads quickly, and provides intuitive navigation and interactive charts."
+  ],
+  "code_summary": {
+    "project_name": "System Hardening Tool",
+    "project_description": "Enterprise-grade automated security assessment and system hardening platform with cybersecurity-themed UI. Provides vulnerability detection, risk assessment, compliance checking, and guided remediation for Linux and Windows systems.",
+    "tech_stack": {
+      "backend": {
+        "language": "Python",
+        "version": "3.8+",
+        "framework": "Flask",
+        "framework_version": "3.0.0",
+        "port": 5000,
+        "key_libraries": [
+          "Flask-CORS 4.0.0",
+          "SQLAlchemy 2.0.23",
+          "psutil 5.9.6",
+          "weasyprint 62.3",
+          "pandas 2.1.3",
+          "python-docx 1.1.0",
+          "Flask-Mail 0.9.1",
+          "pytest 7.4.3",
+          "pytest-flask 1.3.0"
+        ],
+        "database": "SQLite",
+        "main_entry": "src/backend/app.py"
+      },
+      "frontend": {
+        "language": "JavaScript",
+        "framework": "React",
+        "framework_version": "18.2.0",
+        "port": 3000,
+        "key_libraries": [
+          "axios 1.6.0",
+          "chart.js 4.5.1",
+          "react-chartjs-2 5.3.1",
+          "react-scripts 5.0.1"
+        ],
+        "main_entry": "src/frontend/src/index.js",
+        "components_directory": "src/frontend/src/components"
+      }
+    },
+    "architecture": {
+      "type": "Client-Server",
+      "pattern": "REST API",
+      "communication": "HTTP/JSON",
+      "cors_enabled": true
+    },
+    "core_features": [
+      {
+        "name": "Security Scanning",
+        "description": "Multi-dimensional vulnerability detection for network, filesystem, and system updates",
+        "backend_modules": [
+          "scanner.py",
+          "linux_checker.py",
+          "windows_checker.py",
+          "system_detector.py"
+        ],
+        "frontend_components": [
+          "Dashboard.js",
+          "ScanResults.js"
+        ],
+        "api_endpoints": [
+          "/api/scan",
+          "/api/system-info"
+        ]
+      },
+      {
+        "name": "Risk Assessment",
+        "description": "CVSS-inspired 3-component risk scoring (base, temporal, environmental)",
+        "backend_modules": [
+          "risk_scoring.py"
+        ],
+        "frontend_components": [
+          "RiskDashboard.js"
+        ],
+        "api_endpoints": [
+          "/api/risk/trends",
+          "/api/risk/distribution",
+          "/api/risk/high-risk"
+        ]
+      },
+      {
+        "name": "Compliance Management",
+        "description": "Multi-framework compliance checking (CIS, PCI-DSS, HIPAA, SOC 2, GDPR)",
+        "backend_modules": [
+          "compliance_frameworks.py"
+        ],
+        "frontend_components": [
+          "CompliancePanel.js"
+        ],
+        "api_endpoints": [
+          "/api/compliance/frameworks",
+          "/api/compliance/check",
+          "/api/compliance/report"
+        ]
+      },
+      {
+        "name": "Guided Remediation",
+        "description": "Playbook-based automated remediation with validation and rollback",
+        "backend_modules": [
+          "remediation_playbooks.py",
+          "auto_remediation.py",
+          "hardening_engine.py"
+        ],
+        "frontend_components": [
+          "RemediationWizard.js",
+          "RemediationPanel.js",
+          "HardeningPanel.js"
+        ],
+        "api_endpoints": [
+          "/api/playbooks",
+          "/api/playbooks/match",
+          "/api/playbooks/plan",
+          "/api/playbooks/execute"
+        ]
+      },
+      {
+        "name": "Real-time Monitoring",
+        "description": "Live system metrics monitoring (CPU, memory, disk, processes)",
+        "backend_modules": [
+          "realtime_monitor.py"
+        ],
+        "frontend_components": [
+          "MonitoringDashboard.js"
+        ],
+        "api_endpoints": [
+          "/api/monitoring/start",
+          "/api/monitoring/stop",
+          "/api/monitoring/metrics"
+        ]
+      },
+      {
+        "name": "Historical Tracking",
+        "description": "Database-backed scan history with trend analysis",
+        "backend_modules": [
+          "database_models.py"
+        ],
+        "frontend_components": [
+          "HistoryViewer.js"
+        ],
+        "api_endpoints": [
+          "/api/history/scans",
+          "/api/history/trends",
+          "/api/history/statistics"
+        ]
+      },
+      {
+        "name": "Report Generation",
+        "description": "Multi-format report exports (PDF, HTML, JSON, CSV, Excel, Word)",
+        "backend_modules": [
+          "report_generator.py",
+          "export_formats.py"
+        ],
+        "frontend_components": [
+          "Dashboard.js"
+        ],
+        "api_endpoints": [
+          "/api/report/generate",
+          "/api/reports/list"
+        ]
+      },
+      {
+        "name": "Email Notifications",
+        "description": "Automated email delivery for reports and alerts",
+        "backend_modules": [
+          "email_service.py"
+        ],
+        "frontend_components": [],
+        "api_endpoints": [
+          "/api/report/email"
+        ]
+      }
+    ],
+    "backend_modules": [
+      {
+        "name": "scanner.py",
+        "purpose": "Core vulnerability scanning engine",
+        "key_functions": [
+          "scan_system",
+          "detect_vulnerabilities"
+        ]
+      },
+      {
+        "name": "risk_scoring.py",
+        "purpose": "Risk assessment and scoring calculations",
+        "key_functions": [
+          "calculate_risk_score",
+          "prioritize_vulnerabilities"
+        ]
+      },
+      {
+        "name": "database_models.py",
+        "purpose": "SQLAlchemy ORM models for data persistence",
+        "models": [
+          "Scan",
+          "Vulnerability",
+          "RemediationExecution",
+          "SystemSnapshot"
+        ]
+      },
+      {
+        "name": "compliance_frameworks.py",
+        "purpose": "Compliance validation for multiple frameworks",
+        "key_functions": [
+          "check_compliance",
+          "get_framework_requirements"
+        ]
+      },
+      {
+        "name": "remediation_playbooks.py",
+        "purpose": "Playbook automation for security fixes",
+        "key_functions": [
+          "match_playbook",
+          "execute_playbook",
+          "validate_remediation"
+        ]
+      },
+      {
+        "name": "auto_remediation.py",
+        "purpose": "Automated remediation with rollback support",
+        "key_functions": [
+          "auto_remediate",
+          "rollback"
+        ]
+      },
+      {
+        "name": "realtime_monitor.py",
+        "purpose": "Real-time system monitoring",
+        "key_functions": [
+          "start_monitoring",
+          "get_metrics",
+          "get_processes"
+        ]
+      },
+      {
+        "name": "report_generator.py",
+        "purpose": "Report creation and formatting",
+        "key_functions": [
+          "generate_pdf",
+          "generate_html"
+        ]
+      },
+      {
+        "name": "export_formats.py",
+        "purpose": "Export handlers for various formats",
+        "key_functions": [
+          "export_csv",
+          "export_json",
+          "export_excel"
+        ]
+      },
+      {
+        "name": "email_service.py",
+        "purpose": "Email delivery service",
+        "key_functions": [
+          "send_report",
+          "send_alert"
+        ]
+      },
+      {
+        "name": "linux_checker.py",
+        "purpose": "Linux-specific security checks",
+        "key_functions": [
+          "check_ssh_config",
+          "check_firewall",
+          "check_permissions"
+        ]
+      },
+      {
+        "name": "windows_checker.py",
+        "purpose": "Windows-specific security checks",
+        "key_functions": [
+          "check_windows_firewall",
+          "check_updates"
+        ]
+      },
+      {
+        "name": "system_detector.py",
+        "purpose": "OS detection and system information gathering",
+        "key_functions": [
+          "detect_os",
+          "get_system_info"
+        ]
+      },
+      {
+        "name": "hardening_engine.py",
+        "purpose": "System hardening automation",
+        "key_functions": [
+          "apply_hardening",
+          "verify_hardening"
+        ]
+      },
+      {
+        "name": "backup_manager.py",
+        "purpose": "Configuration backup and restore",
+        "key_functions": [
+          "create_backup",
+          "restore_backup"
+        ]
+      }
+    ],
+    "frontend_components": [
+      {
+        "name": "Dashboard.js",
+        "purpose": "Main dashboard with scan controls and statistics",
+        "features": [
+          "Scan initiation",
+          "Real-time status",
+          "Navigation"
+        ]
+      },
+      {
+        "name": "RiskDashboard.js",
+        "purpose": "Risk analysis visualization",
+        "features": [
+          "Risk gauge",
+          "Distribution charts",
+          "Trend graphs"
+        ]
+      },
+      {
+        "name": "HistoryViewer.js",
+        "purpose": "Historical scan data viewer",
+        "features": [
+          "Scan history list",
+          "Trend visualization",
+          "Comparisons"
+        ]
+      },
+      {
+        "name": "RemediationWizard.js",
+        "purpose": "3-step guided remediation wizard",
+        "features": [
+          "Vulnerability selection",
+          "Plan review",
+          "Execution"
+        ]
+      },
+      {
+        "name": "RemediationPanel.js",
+        "purpose": "Auto-remediation interface",
+        "features": [
+          "Automated fixes",
+          "Progress tracking"
+        ]
+      },
+      {
+        "name": "MonitoringDashboard.js",
+        "purpose": "Real-time system monitoring",
+        "features": [
+          "CPU/Memory/Disk metrics",
+          "Process list",
+          "Live updates"
+        ]
+      },
+      {
+        "name": "CompliancePanel.js",
+        "purpose": "Compliance framework viewer",
+        "features": [
+          "Framework selection",
+          "Compliance scores",
+          "Gap analysis"
+        ]
+      },
+      {
+        "name": "HardeningPanel.js",
+        "purpose": "System hardening controls",
+        "features": [
+          "Hardening options",
+          "Configuration"
+        ]
+      },
+      {
+        "name": "ScanResults.js",
+        "purpose": "Scan results display",
+        "features": [
+          "Vulnerability list",
+          "Severity filtering"
+        ]
+      }
+    ],
+    "api_endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/health",
+        "description": "Health check"
+      },
+      {
+        "method": "GET",
+        "path": "/api/system-info",
+        "description": "System information"
+      },
+      {
+        "method": "POST",
+        "path": "/api/scan",
+        "description": "Execute security scan"
+      },
+      {
+        "method": "GET",
+        "path": "/api/history/scans",
+        "description": "Get scan history"
+      },
+      {
+        "method": "GET",
+        "path": "/api/history/trends",
+        "description": "Get vulnerability trends"
+      },
+      {
+        "method": "GET",
+        "path": "/api/risk/trends",
+        "description": "Get risk trends"
+      },
+      {
+        "method": "GET",
+        "path": "/api/risk/distribution",
+        "description": "Get risk distribution"
+      },
+      {
+        "method": "GET",
+        "path": "/api/playbooks",
+        "description": "List remediation playbooks"
+      },
+      {
+        "method": "POST",
+        "path": "/api/playbooks/match",
+        "description": "Match playbook to vulnerability"
+      },
+      {
+        "method": "POST",
+        "path": "/api/playbooks/plan",
+        "description": "Create remediation plan"
+      },
+      {
+        "method": "POST",
+        "path": "/api/monitoring/start",
+        "description": "Start monitoring"
+      },
+      {
+        "method": "GET",
+        "path": "/api/monitoring/metrics",
+        "description": "Get system metrics"
+      },
+      {
+        "method": "POST",
+        "path": "/api/compliance/check",
+        "description": "Check compliance"
+      },
+      {
+        "method": "POST",
+        "path": "/api/report/generate",
+        "description": "Generate report"
+      }
+    ],
+    "database_schema": {
+      "tables": [
+        {
+          "name": "scans",
+          "description": "Security scan records",
+          "key_fields": [
+            "id",
+            "scan_id",
+            "timestamp",
+            "total_vulnerabilities",
+            "compliance_score"
+          ]
+        },
+        {
+          "name": "vulnerabilities",
+          "description": "Individual security findings",
+          "key_fields": [
+            "id",
+            "scan_id",
+            "category",
+            "severity",
+            "description",
+            "risk_score"
+          ]
+        },
+        {
+          "name": "remediation_executions",
+          "description": "Playbook execution history",
+          "key_fields": [
+            "id",
+            "playbook_id",
+            "timestamp",
+            "status",
+            "before_risk",
+            "after_risk"
+          ]
+        },
+        {
+          "name": "system_snapshots",
+          "description": "System state snapshots",
+          "key_fields": [
+            "id",
+            "timestamp",
+            "system_info",
+            "configurations"
+          ]
+        }
+      ]
+    },
+    "ui_theme": {
+      "name": "Cybersecurity Dark Theme",
+      "colors": [
+        "#00d9ff (cyber blue)",
+        "#b24bf3 (purple)",
+        "#00ff41 (matrix green)",
+        "#0a0e27 (dark bg)"
+      ],
+      "style": "Professional dark mode with neon accents"
+    },
+    "testing": {
+      "backend_framework": "pytest",
+      "frontend_framework": "react-scripts test",
+      "test_files": [
+        "scripts/test_backend.py"
+      ]
+    }
+  }
+}

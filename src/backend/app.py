@@ -22,6 +22,8 @@ from modules.realtime_monitor import RealtimeMonitor
 from modules.compliance_frameworks import ComplianceChecker
 from modules.auto_remediation import AutoRemediation
 from modules.database_models import DatabaseManager
+from modules.scanner import Scanner
+from modules.system_detector import SystemDetector
 
 # Load environment variables
 load_dotenv()
@@ -65,6 +67,11 @@ realtime_monitor = RealtimeMonitor()
 compliance_checker = ComplianceChecker()
 auto_remediation = AutoRemediation()
 db_manager = DatabaseManager()
+system_detector = SystemDetector()
+
+# Initialize scanner with detected OS type
+os_type = system_detector.detect_os_type()
+scanner = Scanner(os_type)
 
 
 # ========================
@@ -148,51 +155,68 @@ def scan_system():
         data = request.get_json(force=True, silent=True) or {}
         scan_type = data.get('type', 'full')
 
-        # Mock scan results with realistic data
-        # Generate random compliance score between 70 and 90
-        compliance_score = round(random.uniform(70.0, 90.0), 1)
+        logger.info(f"Starting {scan_type} security scan")
+
+        # Perform real scan using scanner module
+        scan_result = scanner.scan(scan_type=scan_type, options=data.get('options'))
+
+        # Convert scanner results to API response format
+        findings_list = []
+        critical_count = 0
+        high_count = 0
+        medium_count = 0
+        low_count = 0
+
+        for idx, finding in enumerate(scan_result.findings, start=1):
+            severity = finding.severity.value.capitalize()
+
+            # Count severity levels
+            if finding.severity.value == 'critical':
+                critical_count += 1
+            elif finding.severity.value == 'high':
+                high_count += 1
+            elif finding.severity.value == 'medium':
+                medium_count += 1
+            elif finding.severity.value == 'low':
+                low_count += 1
+
+            findings_list.append({
+                "id": idx,
+                "category": finding.category,
+                "severity": severity,
+                "title": finding.title,
+                "description": finding.description,
+                "status": "Open",
+                "timestamp": finding.timestamp,
+                "recommendation": finding.remediation or "No specific remediation provided",
+                "affected_item": finding.affected_item,
+                "references": finding.references or []
+            })
+
+        # Calculate compliance score based on findings
+        # Formula: 100 - (critical*10 + high*5 + medium*2 + low*1)
+        total_vulnerabilities = len([f for f in scan_result.findings if f.severity.value != 'info'])
+        deduction = (critical_count * 10 + high_count * 5 + medium_count * 2 + low_count * 1)
+        compliance_score = max(0, min(100, 100 - deduction))
 
         scan_results = {
-            "scan_id": f"scan_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            "scan_id": scan_result.scan_id,
             "scan_type": scan_type,
-            "timestamp": datetime.now().isoformat(),
-            "status": "completed",
-            "totalVulnerabilities": 3,
-            "complianceScore": compliance_score,
-            "criticalIssues": 1,
-            "warnings": 2,
-            "findings": [
-                {
-                    "id": 1,
-                    "category": "Network Security",
-                    "severity": "Critical",
-                    "description": "SSH service allows password authentication",
-                    "status": "Open",
-                    "timestamp": datetime.now().isoformat(),
-                    "recommendation": "Disable password authentication and use key-based authentication"
-                },
-                {
-                    "id": 2,
-                    "category": "File System",
-                    "severity": "Warning",
-                    "description": "World-writable files detected in /tmp",
-                    "status": "Open",
-                    "timestamp": datetime.now().isoformat(),
-                    "recommendation": "Review and restrict permissions on temporary files"
-                },
-                {
-                    "id": 3,
-                    "category": "System Updates",
-                    "severity": "Medium",
-                    "description": "System packages require updates",
-                    "status": "Open",
-                    "timestamp": datetime.now().isoformat(),
-                    "recommendation": "Run system update to patch security vulnerabilities"
-                }
-            ]
+            "timestamp": scan_result.start_time,
+            "status": scan_result.status.value,
+            "duration_seconds": scan_result.duration_seconds,
+            "totalVulnerabilities": total_vulnerabilities,
+            "complianceScore": round(compliance_score, 1),
+            "criticalIssues": critical_count,
+            "highIssues": high_count,
+            "mediumIssues": medium_count,
+            "lowIssues": low_count,
+            "warnings": high_count + medium_count,
+            "findings": findings_list,
+            "summary": scan_result.get_summary()
         }
 
-        logger.info(f"Scan completed: {scan_results['scan_id']}")
+        logger.info(f"Scan completed: {scan_results['scan_id']} with {total_vulnerabilities} vulnerabilities found")
 
         # Save scan results to database
         try:
@@ -206,7 +230,7 @@ def scan_system():
         return jsonify(scan_results), 200
 
     except Exception as e:
-        logger.error(f"Scan failed: {str(e)}")
+        logger.error(f"Scan failed: {str(e)}", exc_info=True)
         return jsonify({
             "status": "error",
             "message": "Security scan failed",
@@ -304,13 +328,89 @@ def generate_security_report():
         before_scan = data.get('before_scan')
         after_scan = data.get('after_scan')
         title = data.get('title', 'System Security Report')
+        use_latest = data.get('use_latest', False)  # Option to use latest scan from DB
 
-        # Validate that at least some data was provided
+        # If no data provided, perform a real-time scan
         if not any([scan_results, hardening_session, before_scan, after_scan]):
-            return jsonify({
-                "status": "error",
-                "message": "No report data provided. Please provide at least one of: scan_results, hardening_session, before_scan, or after_scan"
-            }), 400
+            if use_latest:
+                # Try to get latest scan from database
+                logger.info("No data provided, fetching latest scan from database")
+                try:
+                    latest_scan = db_manager.get_latest_scan()
+                    if latest_scan:
+                        scan_results = latest_scan
+                        logger.info(f"Using latest scan from database: {latest_scan.get('scan_id')}")
+                    else:
+                        logger.info("No scans in database, performing new scan")
+                        use_latest = False
+                except Exception as e:
+                    logger.warning(f"Failed to fetch latest scan: {e}")
+                    use_latest = False
+
+            if not use_latest:
+                # Perform real-time scan
+                logger.info("No data provided, performing real-time security scan for report")
+                scan_type = data.get('scan_type', 'full')
+
+                # Perform the scan using the real scanner
+                scan_result = scanner.scan(scan_type=scan_type, options=data.get('options'))
+
+                # Convert scanner results to API response format (same as scan endpoint)
+                findings_list = []
+                critical_count = 0
+                high_count = 0
+                medium_count = 0
+                low_count = 0
+
+                for idx, finding in enumerate(scan_result.findings, start=1):
+                    severity = finding.severity.value.capitalize()
+
+                    if finding.severity.value == 'critical':
+                        critical_count += 1
+                    elif finding.severity.value == 'high':
+                        high_count += 1
+                    elif finding.severity.value == 'medium':
+                        medium_count += 1
+                    elif finding.severity.value == 'low':
+                        low_count += 1
+
+                    findings_list.append({
+                        "id": idx,
+                        "category": finding.category,
+                        "severity": severity,
+                        "title": finding.title,
+                        "description": finding.description,
+                        "status": "Open",
+                        "timestamp": finding.timestamp,
+                        "recommendation": finding.remediation or "No specific remediation provided",
+                        "affected_item": finding.affected_item,
+                        "references": finding.references or []
+                    })
+
+                # Calculate compliance score
+                total_vulnerabilities = len([f for f in scan_result.findings if f.severity.value != 'info'])
+                deduction = (critical_count * 10 + high_count * 5 + medium_count * 2 + low_count * 1)
+                compliance_score = max(0, min(100, 100 - deduction))
+
+                scan_results = {
+                    "scan_id": scan_result.scan_id,
+                    "scan_type": scan_type,
+                    "timestamp": scan_result.start_time,
+                    "status": scan_result.status.value,
+                    "duration_seconds": scan_result.duration_seconds,
+                    "totalVulnerabilities": total_vulnerabilities,
+                    "complianceScore": round(compliance_score, 1),
+                    "criticalIssues": critical_count,
+                    "highIssues": high_count,
+                    "mediumIssues": medium_count,
+                    "lowIssues": low_count,
+                    "warnings": high_count + medium_count,
+                    "findings": findings_list,
+                    "summary": scan_result.get_summary(),
+                    "system_info": get_system_info()
+                }
+
+                logger.info(f"Real-time scan completed for report: {scan_results['scan_id']}")
 
         # Handle new export formats (Excel, CSV, DOCX, Markdown)
         if report_format in ['excel', 'csv', 'docx', 'markdown']:

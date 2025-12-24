@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { applyHardening } from '../api/client';
+import VulnerabilityDetailsModal from './VulnerabilityDetailsModal';
 import './ScanResults.css';
 
 function ScanResults({ scanData, onHardeningComplete }) {
@@ -9,6 +10,7 @@ function ScanResults({ scanData, onHardeningComplete }) {
   const [applying, setApplying] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [selectedVulnerability, setSelectedVulnerability] = useState(null);
 
   // Process scan data when it changes
   useEffect(() => {
@@ -227,7 +229,7 @@ function ScanResults({ scanData, onHardeningComplete }) {
                 <th className="id-col">ID</th>
                 <th className="title-col">Issue</th>
                 <th className="description-col">Description</th>
-                <th className="recommendation-col">Recommendation</th>
+                <th className="actions-col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -256,10 +258,20 @@ function ScanResults({ scanData, onHardeningComplete }) {
                     <strong>{finding.title || 'Untitled Issue'}</strong>
                   </td>
                   <td className="description-col">
-                    {finding.description || 'No description available'}
+                    <div className="description-preview">
+                      {finding.description && finding.description.length > 100
+                        ? `${finding.description.substring(0, 100)}...`
+                        : finding.description || 'No description available'}
+                    </div>
                   </td>
-                  <td className="recommendation-col">
-                    {finding.recommendation || finding.remediation || 'No recommendation available'}
+                  <td className="actions-col">
+                    <button
+                      className="btn-view-details"
+                      onClick={() => setSelectedVulnerability(finding)}
+                      title="View full details and remediation steps"
+                    >
+                      View Details
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -300,6 +312,14 @@ function ScanResults({ scanData, onHardeningComplete }) {
           </div>
         </div>
       </div>
+
+      {/* Vulnerability Details Modal */}
+      {selectedVulnerability && (
+        <VulnerabilityDetailsModal
+          vulnerability={selectedVulnerability}
+          onClose={() => setSelectedVulnerability(null)}
+        />
+      )}
     </div>
   );
 }

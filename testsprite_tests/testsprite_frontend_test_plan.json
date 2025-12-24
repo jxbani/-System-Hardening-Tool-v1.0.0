@@ -1,0 +1,461 @@
+[
+  {
+    "id": "TC001",
+    "title": "Successful Full Security Scan Execution",
+    "description": "Verify that a user can initiate and successfully complete a full system security scan with accurate vulnerability detection and results categorized by severity.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in to the dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the scan initiation section"
+      },
+      {
+        "type": "action",
+        "description": "Select 'Full Scan' option"
+      },
+      {
+        "type": "action",
+        "description": "Start the scan"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the scan completes within predefined time limits"
+      },
+      {
+        "type": "assertion",
+        "description": "Check vulnerability results are categorized by severity (e.g. critical, high, medium, low)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify results include network, filesystem, and system update vulnerabilities"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm scan results are persistently stored and retrievable"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Quick Scan Option Functionality",
+    "description": "Ensure that selecting the quick scan option performs a shortened scan focusing on critical areas with summarized results displayed.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in to the dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to scan controls"
+      },
+      {
+        "type": "action",
+        "description": "Select 'Quick Scan' option"
+      },
+      {
+        "type": "action",
+        "description": "Initiate scan"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate scan runs faster than full scan and completes successfully"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify vulnerabilities detected focus on most critical components"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm results update on the UI with proper categorization"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Risk Scoring Accuracy and Trend Visualization",
+    "description": "Validate that the risk assessment component calculates and displays CVSS-inspired risk scores correctly and that trend charts update dynamically based on scan data.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Complete a system scan with known vulnerabilities"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the Risk Dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify base, temporal, and environmental risk score components are calculated and combined accurately"
+      },
+      {
+        "type": "assertion",
+        "description": "Check risk distribution charts correctly reflect vulnerability severities"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate risk trend graphs update dynamically with new scan data"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure that high risk items are clearly highlighted"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Compliance Framework Selection and Check",
+    "description": "Test that users can select compliance frameworks and run compliance checks producing accurate scores and gap analysis.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Access the Compliance Panel"
+      },
+      {
+        "type": "action",
+        "description": "Select the 'PCI-DSS' compliance framework"
+      },
+      {
+        "type": "action",
+        "description": "Run compliance check against selected framework"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate the compliance score is calculated based on system scans"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify detailed gap analysis report lists non-compliant items"
+      },
+      {
+        "type": "assertion",
+        "description": "Check report can be viewed and downloaded from the UI"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Guided Remediation Workflow Execution",
+    "description": "Verify the end-to-end guided remediation process including vulnerability selection, remediation plan review, execution, and rollback on failure.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the Remediation Wizard"
+      },
+      {
+        "type": "action",
+        "description": "Select multiple vulnerabilities for remediation"
+      },
+      {
+        "type": "action",
+        "description": "Review generated remediation plans based on playbooks"
+      },
+      {
+        "type": "action",
+        "description": "Execute the remediation plan"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify progress is tracked and displayed in real-time"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate remediation validation step confirms fixes applied successfully"
+      },
+      {
+        "type": "action",
+        "description": "Simulate remediation failure"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm automatic rollback occurs restoring previous system state"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Real-Time Monitoring Metrics Update and Alerts",
+    "description": "Ensure real-time system metrics (CPU, memory, disk, network) update every 5 seconds, and alert thresholds trigger visible notifications with sortable process listings.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Monitoring Dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify CPU, memory, disk, and network metrics update at least every 5 seconds"
+      },
+      {
+        "type": "assertion",
+        "description": "Trigger an alert by exceeding predefined metric thresholds"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that alerts are visible and clearly indicated in the UI"
+      },
+      {
+        "type": "assertion",
+        "description": "Sort process list by CPU usage and verify sorting order"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Historical Scan Data Persistence and Comparison",
+    "description": "Validate that historical scan data is stored persistently, trends are analyzable, and side-by-side scan comparison features function properly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Run multiple security scans over time"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the History Viewer"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that all previous scan records are retrievable"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate trend analysis charts accurately reflect changes over time"
+      },
+      {
+        "type": "action",
+        "description": "Select two scans for side-by-side comparison"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure comparison view highlights differences in vulnerabilities and risk scores"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Multi-Format Report Generation and Email Delivery",
+    "description": "Test report generation in all supported formats with embedded charts and recommendations, and email delivery with correct attachments.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Generate security reports in PDF, HTML, JSON, CSV, Excel, and Word formats"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify each report includes embedded charts and remediation recommendations"
+      },
+      {
+        "type": "action",
+        "description": "Send generated report via email using report email feature"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm email is sent successfully with correct report attachments"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "User Interface Cybersecurity Dark Theme Consistency",
+    "description": "Ensure the UI consistently applies the cybersecurity dark theme including color scheme, fast load times, intuitive navigation, and interactive charts.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Launch the web application"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify UI uses the designated dark background (#0a0e27) with cyber blue, purple, and matrix green accents"
+      },
+      {
+        "type": "assertion",
+        "description": "Check fast page load times across all core UI views"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate navigation is intuitive and logical"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm interactive charts (risk trends, compliance scores) respond to user input"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Error Handling for Failed Scan Execution",
+    "description": "Verify that the system handles scan execution failures gracefully with proper error messages and recovery options.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Initiate a system scan with induced backend failure (simulate error)"
+      },
+      {
+        "type": "assertion",
+        "description": "Observe that user receives an informative error notification"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure scan status shows as failed in UI"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that recovery options such as retry scan are available"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "API Endpoint Security and Input Validation",
+    "description": "Test that all public API endpoints enforce authentication, validate inputs properly, and return meaningful error codes on invalid requests.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send unauthenticated requests to all major API endpoints"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify each endpoint responds with appropriate authorization error"
+      },
+      {
+        "type": "action",
+        "description": "Send authenticated requests with invalid input payloads to endpoints such as /api/scan and /api/playbooks/plan"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm responses contain input validation error messages and reject invalid data"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Remediation Rollback Functionality Under Failure",
+    "description": "Validate that when a remediation step fails during execution, the system rollbacks changes properly and maintains integrity.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Trigger remediation execution with controlled failure in remediation playbook"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify rollback process initiates automatically"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm system state is restored to pre-remediation snapshot"
+      },
+      {
+        "type": "assertion",
+        "description": "Check UI accurately reflects rollback status and final outcome"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Real-Time Monitoring Stop and Restart",
+    "description": "Ensure that real-time monitoring can be stopped and restarted reliably without loss of data or performance degradation.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Start real-time monitoring through API or UI"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify real-time metrics are received and updated"
+      },
+      {
+        "type": "action",
+        "description": "Stop the monitoring session"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm monitoring data updates cease"
+      },
+      {
+        "type": "action",
+        "description": "Restart monitoring"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify metrics resume updating correctly"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Multi-OS Vulnerability Detection Coverage",
+    "description": "Test that vulnerability scanners use platform-specific checks for both Linux and Windows and detect relevant misconfigurations and outdated software.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Run scans on Linux system"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify detection of SSH misconfiguration, firewall status, permissions"
+      },
+      {
+        "type": "action",
+        "description": "Run scans on Windows system"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify detection of Windows firewall settings and outdated updates"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Report Generation Load and Performance",
+    "description": "Validate report generation handles large scan datasets without performance degradation or crashes across all formats.",
+    "category": "performance",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Generate reports for scan containing a large number of vulnerabilities (1000+ records)"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm reports complete generation without errors"
+      },
+      {
+        "type": "assertion",
+        "description": "Measure generation time and verify it is within acceptable performance thresholds"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate all report formats correctly include charts and content"
+      }
+    ]
+  }
+]

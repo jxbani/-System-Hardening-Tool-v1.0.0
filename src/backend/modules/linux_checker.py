@@ -185,8 +185,7 @@ class LinuxChecker:
                     "status": "fail",
                     "current_value": permit_root,
                     "expected_value": "no",
-                    "remediation": f"Edit {sshd_config_path} and set 'PermitRootLogin no', "
-                                   "then restart SSH service with 'systemctl restart sshd'",
+                    "remediation": self._get_detailed_remediation("ssh_permit_root_login", sshd_config_path),
                     "affected_item": sshd_config_path,
                     "references": [
                         "https://www.ssh.com/academy/ssh/sshd_config",
@@ -231,8 +230,7 @@ class LinuxChecker:
                     "status": "warning",
                     "current_value": password_auth,
                     "expected_value": "no (use key-based auth)",
-                    "remediation": f"Edit {sshd_config_path} and set 'PasswordAuthentication no'. "
-                                   "Ensure SSH keys are configured before disabling.",
+                    "remediation": self._get_detailed_remediation("ssh_password_authentication", sshd_config_path),
                     "affected_item": sshd_config_path,
                     "references": ["CIS Benchmark: 5.2.8"]
                 })
@@ -275,7 +273,7 @@ class LinuxChecker:
                     "status": "warning",
                     "current_value": current_port,
                     "expected_value": "non-default port (e.g., 2222)",
-                    "remediation": f"Edit {sshd_config_path} and set 'Port <custom_port>'",
+                    "remediation": self._get_detailed_remediation("ssh_port", sshd_config_path),
                     "affected_item": sshd_config_path
                 })
             else:
@@ -451,7 +449,7 @@ class LinuxChecker:
                     "status": "fail",
                     "current_value": f"{max_days} days",
                     "expected_value": f"<= {recommended_max} days",
-                    "remediation": f"Edit {login_defs_path} and set 'PASS_MAX_DAYS {recommended_max}'",
+                    "remediation": self._get_detailed_remediation("pass_max_days", login_defs_path),
                     "affected_item": login_defs_path,
                     "references": ["CIS Benchmark: 5.4.1.1"]
                 })
@@ -507,7 +505,7 @@ class LinuxChecker:
                     "status": "fail",
                     "current_value": f"{min_days} days",
                     "expected_value": f">= {recommended_min} day",
-                    "remediation": f"Edit {login_defs_path} and set 'PASS_MIN_DAYS {recommended_min}'",
+                    "remediation": self._get_detailed_remediation("pass_min_days", login_defs_path),
                     "affected_item": login_defs_path
                 })
             else:
@@ -547,7 +545,7 @@ class LinuxChecker:
                     "status": "warning",
                     "current_value": "not set",
                     "expected_value": f">= {recommended_min} characters",
-                    "remediation": f"Add 'PASS_MIN_LEN {recommended_min}' to {login_defs_path}",
+                    "remediation": self._get_detailed_remediation("pass_min_len", login_defs_path),
                     "affected_item": login_defs_path
                 })
             elif int(min_len) < recommended_min:
@@ -561,7 +559,7 @@ class LinuxChecker:
                     "status": "fail",
                     "current_value": f"{min_len} characters",
                     "expected_value": f">= {recommended_min} characters",
-                    "remediation": f"Edit {login_defs_path} and set 'PASS_MIN_LEN {recommended_min}'",
+                    "remediation": self._get_detailed_remediation("pass_min_len", login_defs_path),
                     "affected_item": login_defs_path
                 })
             else:
@@ -708,8 +706,7 @@ class LinuxChecker:
                 "status": "fail",
                 "current_value": "no firewall active",
                 "expected_value": "active firewall",
-                "remediation": "Install and enable UFW with 'sudo apt install ufw && sudo ufw enable' "
-                               "or configure iptables",
+                "remediation": self._get_detailed_remediation("firewall_not_configured", "firewall"),
                 "affected_item": "firewall",
                 "references": ["CIS Benchmark: 3.5"]
             })
@@ -1061,6 +1058,295 @@ class LinuxChecker:
             "expected_value": "successful check",
             "affected_item": affected_item
         }
+
+    def _get_detailed_remediation(self, check_name: str, affected_item: str = "", **kwargs) -> str:
+        """
+        Get detailed step-by-step remediation instructions for a specific check.
+
+        Args:
+            check_name: Name of the security check
+            affected_item: The item that needs remediation
+            **kwargs: Additional parameters specific to the check
+
+        Returns:
+            Detailed remediation instructions with commands
+        """
+        remediations = {
+            "ssh_permit_root_login": """
+STEP-BY-STEP FIX:
+1. Backup the SSH configuration file:
+   sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+
+2. Edit the SSH configuration:
+   sudo nano /etc/ssh/sshd_config
+
+3. Find the line containing 'PermitRootLogin' and change it to:
+   PermitRootLogin no
+
+4. If the line doesn't exist, add it at the end of the file
+
+5. Save and exit (Ctrl+X, then Y, then Enter in nano)
+
+6. Test the configuration for syntax errors:
+   sudo sshd -t
+
+7. If no errors, restart SSH service:
+   sudo systemctl restart sshd
+
+8. Verify root login is disabled by checking:
+   sudo grep "^PermitRootLogin" /etc/ssh/sshd_config
+
+⚠️  IMPORTANT: Ensure you have a non-root user with sudo privileges before disabling root login!
+""",
+            "ssh_password_authentication": """
+STEP-BY-STEP FIX:
+1. First, set up SSH key authentication for your user:
+   # On your local machine:
+   ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+
+   # Copy the key to the server:
+   ssh-copy-id username@server_ip
+
+2. Test SSH key login before disabling passwords:
+   ssh username@server_ip
+
+3. Once verified, backup SSH config:
+   sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+
+4. Edit the SSH configuration:
+   sudo nano /etc/ssh/sshd_config
+
+5. Find and modify these lines:
+   PasswordAuthentication no
+   ChallengeResponseAuthentication no
+   PubkeyAuthentication yes
+
+6. Save and exit (Ctrl+X, then Y, then Enter)
+
+7. Test configuration:
+   sudo sshd -t
+
+8. Restart SSH:
+   sudo systemctl restart sshd
+
+⚠️  CRITICAL: Do NOT close your current SSH session until you verify key-based login works!
+""",
+            "ssh_port": """
+STEP-BY-STEP FIX:
+1. Choose a non-standard port (e.g., 2222, avoid ports below 1024 or commonly used ports)
+
+2. Backup SSH config:
+   sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+
+3. Edit SSH configuration:
+   sudo nano /etc/ssh/sshd_config
+
+4. Find the line '#Port 22' or 'Port 22' and change to:
+   Port 2222
+   (Replace 2222 with your chosen port)
+
+5. If using a firewall (UFW), allow the new port:
+   sudo ufw allow 2222/tcp
+   sudo ufw reload
+
+6. For SELinux systems, allow the new port:
+   sudo semanage port -a -t ssh_port_t -p tcp 2222
+
+7. Test configuration:
+   sudo sshd -t
+
+8. Restart SSH:
+   sudo systemctl restart sshd
+
+9. Test connection on new port (keep current session open):
+   ssh -p 2222 username@server_ip
+
+⚠️  Keep your current SSH session open until you verify the new port works!
+""",
+            "pass_max_days": """
+STEP-BY-STEP FIX:
+1. Backup the login definitions file:
+   sudo cp /etc/login.defs /etc/login.defs.backup
+
+2. Edit the file:
+   sudo nano /etc/login.defs
+
+3. Find the line 'PASS_MAX_DAYS' and change to:
+   PASS_MAX_DAYS 90
+
+4. Save and exit (Ctrl+X, then Y, then Enter)
+
+5. Apply to existing users (optional but recommended):
+   # List users with UID >= 1000
+   awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd
+
+   # Set max days for each user:
+   sudo chage -M 90 username
+
+6. Verify changes:
+   grep PASS_MAX_DAYS /etc/login.defs
+
+7. Check specific user:
+   sudo chage -l username
+
+📝 Note: This only affects NEW users. Existing users need manual update with 'chage' command.
+""",
+            "pass_min_days": """
+STEP-BY-STEP FIX:
+1. Backup configuration:
+   sudo cp /etc/login.defs /etc/login.defs.backup
+
+2. Edit the file:
+   sudo nano /etc/login.defs
+
+3. Find or add the line:
+   PASS_MIN_DAYS 1
+
+4. Save and exit (Ctrl+X, then Y, then Enter)
+
+5. Apply to existing users:
+   # For each user with UID >= 1000:
+   sudo chage -m 1 username
+
+6. Verify:
+   grep PASS_MIN_DAYS /etc/login.defs
+   sudo chage -l username
+
+📝 This prevents users from changing passwords too frequently.
+""",
+            "pass_min_len": """
+STEP-BY-STEP FIX:
+1. Backup configuration:
+   sudo cp /etc/login.defs /etc/login.defs.backup
+
+2. Edit the file:
+   sudo nano /etc/login.defs
+
+3. Add or modify the line:
+   PASS_MIN_LEN 14
+
+4. For stronger enforcement, also configure PAM:
+   sudo nano /etc/pam.d/common-password
+
+5. Find the line with 'pam_unix.so' and add 'minlen=14':
+   password [success=1 default=ignore] pam_unix.so obscure sha512 minlen=14
+
+6. Or use pam_pwquality for more options:
+   sudo apt install libpam-pwquality
+   sudo nano /etc/security/pwquality.conf
+
+   Add:
+   minlen = 14
+   dcredit = -1  # At least 1 digit
+   ucredit = -1  # At least 1 uppercase
+   lcredit = -1  # At least 1 lowercase
+   ocredit = -1  # At least 1 special char
+
+7. Save all files and exit
+
+8. Test with a new user or password change:
+   sudo passwd testuser
+
+📝 Strong passwords are your first line of defense!
+""",
+            "firewall_not_configured": """
+STEP-BY-STEP FIX (Using UFW - Recommended for beginners):
+
+1. Install UFW if not present:
+   sudo apt update
+   sudo apt install ufw
+
+2. Set default policies (deny incoming, allow outgoing):
+   sudo ufw default deny incoming
+   sudo ufw default allow outgoing
+
+3. Allow SSH before enabling (CRITICAL - prevents lockout):
+   sudo ufw allow ssh
+   # Or if using custom SSH port:
+   sudo ufw allow 2222/tcp
+
+4. Allow other essential services:
+   # Web server:
+   sudo ufw allow 80/tcp
+   sudo ufw allow 443/tcp
+
+   # Custom applications:
+   sudo ufw allow [port]/[protocol]
+
+5. Enable the firewall:
+   sudo ufw enable
+
+6. Verify status:
+   sudo ufw status verbose
+
+7. To see numbered list of rules:
+   sudo ufw status numbered
+
+8. To delete a rule:
+   sudo ufw delete [number]
+
+ALTERNATIVE - Using iptables:
+
+1. Create basic firewall rules:
+   # Allow established connections:
+   sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+   # Allow loopback:
+   sudo iptables -A INPUT -i lo -j ACCEPT
+
+   # Allow SSH:
+   sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+   # Drop everything else:
+   sudo iptables -A INPUT -j DROP
+
+2. Save rules (Ubuntu/Debian):
+   sudo apt install iptables-persistent
+   sudo netfilter-persistent save
+
+3. View rules:
+   sudo iptables -L -v -n
+
+⚠️  CRITICAL: Always allow SSH before enabling the firewall to prevent lockout!
+📝 Reference: CIS Benchmark 3.5
+""",
+            "shadow_permissions": """
+STEP-BY-STEP FIX:
+1. Check current permissions:
+   ls -l /etc/shadow
+
+2. Fix permissions:
+   sudo chmod 640 /etc/shadow
+   sudo chown root:shadow /etc/shadow
+
+3. Verify the fix:
+   ls -l /etc/shadow
+   # Should show: -rw-r----- 1 root shadow
+
+📝 The shadow file contains password hashes and must be protected.
+""",
+            "passwd_permissions": """
+STEP-BY-STEP FIX:
+1. Check current permissions:
+   ls -l /etc/passwd
+
+2. Fix permissions:
+   sudo chmod 644 /etc/passwd
+   sudo chown root:root /etc/passwd
+
+3. Verify the fix:
+   ls -l /etc/passwd
+   # Should show: -rw-r--r-- 1 root root
+
+📝 The passwd file must be world-readable for system functionality.
+"""
+        }
+
+        # Return detailed remediation or a default message
+        return remediations.get(check_name,
+            f"No detailed remediation steps available for {check_name}. "
+            f"Please refer to security best practices documentation."
+        )
 
 
 # Example usage and testing

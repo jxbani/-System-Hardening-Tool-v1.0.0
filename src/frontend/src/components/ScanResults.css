@@ -305,6 +305,34 @@
   line-height: 1.5;
 }
 
+.actions-col {
+  width: 140px;
+  text-align: center;
+}
+
+.description-preview {
+  line-height: 1.5;
+}
+
+.btn-view-details {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-view-details:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #5568d3 0%, #633a87 100%);
+}
+
 /* Severity Badges */
 .severity-badge {
   display: inline-block;

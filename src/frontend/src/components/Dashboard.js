@@ -280,26 +280,57 @@ function Dashboard() {
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: '30px',
-      padding: '20px',
-      backgroundColor: '#ffffff',
-      borderRadius: '8px',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      padding: '30px',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      borderRadius: '12px',
+      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+    },
+    headerLeft: {
+      flex: 1,
     },
     headerTitle: {
       margin: 0,
-      fontSize: '28px',
-      color: '#2c3e50',
-      fontWeight: '600',
+      fontSize: '32px',
+      color: '#ffffff',
+      fontWeight: '700',
+      marginBottom: '8px',
+    },
+    headerSubtitle: {
+      margin: 0,
+      fontSize: '16px',
+      color: 'rgba(255, 255, 255, 0.9)',
+      fontWeight: '400',
+    },
+    headerRight: {
+      display: 'flex',
+      alignItems: 'center',
     },
     backendStatus: {
       display: 'flex',
       alignItems: 'center',
-      gap: '8px',
-      fontSize: '14px',
+      gap: '12px',
+      padding: '12px 20px',
+      borderRadius: '8px',
+      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+    },
+    statusText: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '2px',
+    },
+    statusLabel: {
+      fontSize: '11px',
+      color: 'rgba(255, 255, 255, 0.7)',
+      textTransform: 'uppercase',
+      letterSpacing: '0.5px',
       fontWeight: '500',
-      padding: '8px 16px',
-      borderRadius: '20px',
-      backgroundColor: '#f8f9fa',
+    },
+    statusValue: {
+      fontSize: '14px',
+      color: '#ffffff',
+      fontWeight: '600',
     },
     statusIndicator: {
       width: '10px',
@@ -386,11 +417,19 @@ function Dashboard() {
       gap: '16px',
     },
     statItem: {
-      textAlign: 'center',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '16px',
       padding: '20px',
-      backgroundColor: '#f8f9fa',
+      backgroundColor: '#ffffff',
       borderRadius: '8px',
-      border: '2px solid #e9ecef',
+      border: '1px solid #e9ecef',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+      transition: 'transform 0.2s, box-shadow 0.2s',
+    },
+    statIcon: {
+      fontSize: '32px',
+      flexShrink: 0,
     },
     statValue: {
       fontSize: '32px',
@@ -511,6 +550,32 @@ function Dashboard() {
       marginTop: '12px',
       color: '#dc3545',
       fontSize: '14px',
+      fontStyle: 'italic',
+    },
+    scanningInfo: {
+      marginTop: '20px',
+      width: '100%',
+    },
+    scanningProgress: {
+      width: '100%',
+      height: '8px',
+      backgroundColor: '#e9ecef',
+      borderRadius: '4px',
+      overflow: 'hidden',
+      marginBottom: '12px',
+    },
+    progressBar: {
+      height: '100%',
+      background: 'linear-gradient(90deg, #667eea 0%, #764ba2 50%, #667eea 100%)',
+      backgroundSize: '200% 100%',
+      animation: 'shimmer 2s infinite',
+      borderRadius: '4px',
+    },
+    scanningText: {
+      textAlign: 'center',
+      color: '#6c757d',
+      fontSize: '14px',
+      margin: 0,
       fontStyle: 'italic',
     },
     activityList: {
@@ -701,6 +766,10 @@ function Dashboard() {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
           }
+          @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+          }
           .card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -720,15 +789,27 @@ function Dashboard() {
       </style>
 
       <div style={styles.dashboardHeader}>
-        <h1 style={styles.headerTitle}>IronGuard OS - Security Dashboard</h1>
-        <div style={styles.backendStatus}>
-          <span style={{
-            ...styles.statusIndicator,
-            ...(backendStatus === 'connected' ? styles.statusConnected :
-                backendStatus === 'disconnected' ? styles.statusDisconnected :
-                styles.statusChecking)
-          }}></span>
-          Backend: {backendStatus}
+        <div style={styles.headerLeft}>
+          <h1 style={styles.headerTitle}>IronGuard OS - Security Dashboard</h1>
+          <p style={styles.headerSubtitle}>Real-time system security analysis and hardening</p>
+        </div>
+        <div style={styles.headerRight}>
+          <div style={styles.backendStatus}>
+            <span style={{
+              ...styles.statusIndicator,
+              ...(backendStatus === 'connected' ? styles.statusConnected :
+                  backendStatus === 'disconnected' ? styles.statusDisconnected :
+                  styles.statusChecking)
+            }}></span>
+            <div style={styles.statusText}>
+              <span style={styles.statusLabel}>Backend Status</span>
+              <span style={styles.statusValue}>
+                {backendStatus === 'connected' ? 'Connected' :
+                 backendStatus === 'disconnected' ? 'Disconnected' :
+                 'Checking...'}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -814,21 +895,33 @@ function Dashboard() {
         <div style={styles.card} className="card">
           <h2 style={styles.cardTitle}>Security Overview</h2>
           <div style={styles.statsGrid}>
-            <div style={styles.statItem}>
-              <div style={styles.statValue}>{statistics.vulnerabilities}</div>
-              <div style={styles.statLabel}>Vulnerabilities</div>
+            <div style={{...styles.statItem, borderLeft: '4px solid #dc3545'}}>
+              <div style={styles.statIcon}>🚨</div>
+              <div>
+                <div style={{...styles.statValue, ...styles.statValueCritical}}>{statistics.critical}</div>
+                <div style={styles.statLabel}>Critical Issues</div>
+              </div>
             </div>
-            <div style={styles.statItem}>
-              <div style={{...styles.statValue, ...styles.statValueScore}}>{statistics.complianceScore}%</div>
-              <div style={styles.statLabel}>Compliance Score</div>
+            <div style={{...styles.statItem, borderLeft: '4px solid #ffc107'}}>
+              <div style={styles.statIcon}>⚠️</div>
+              <div>
+                <div style={{...styles.statValue, ...styles.statValueWarning}}>{statistics.warning}</div>
+                <div style={styles.statLabel}>Warnings</div>
+              </div>
             </div>
-            <div style={styles.statItem}>
-              <div style={{...styles.statValue, ...styles.statValueCritical}}>{statistics.critical}</div>
-              <div style={styles.statLabel}>Critical Issues</div>
+            <div style={{...styles.statItem, borderLeft: '4px solid #17a2b8'}}>
+              <div style={styles.statIcon}>🔍</div>
+              <div>
+                <div style={styles.statValue}>{statistics.vulnerabilities}</div>
+                <div style={styles.statLabel}>Total Issues</div>
+              </div>
             </div>
-            <div style={styles.statItem}>
-              <div style={{...styles.statValue, ...styles.statValueWarning}}>{statistics.warning}</div>
-              <div style={styles.statLabel}>Warnings</div>
+            <div style={{...styles.statItem, borderLeft: '4px solid #28a745'}}>
+              <div style={styles.statIcon}>✓</div>
+              <div>
+                <div style={{...styles.statValue, ...styles.statValueScore}}>{statistics.complianceScore}%</div>
+                <div style={styles.statLabel}>Compliance</div>
+              </div>
             </div>
           </div>
         </div>
@@ -849,12 +942,23 @@ function Dashboard() {
             {scanning ? (
               <>
                 <span style={styles.spinnerSmall}></span>
-                Scanning...
+                Running Scan...
               </>
             ) : (
-              'Start Security Scan'
+              <>
+                <span style={{fontSize: '18px'}}>🔒</span>
+                Start Security Scan
+              </>
             )}
           </button>
+          {scanning && (
+            <div style={styles.scanningInfo}>
+              <div style={styles.scanningProgress}>
+                <div style={styles.progressBar}></div>
+              </div>
+              <p style={styles.scanningText}>Analyzing system security configuration...</p>
+            </div>
+          )}
           {backendStatus !== 'connected' && (
             <p style={styles.scanWarning}>Backend must be connected to run scan</p>
           )}
