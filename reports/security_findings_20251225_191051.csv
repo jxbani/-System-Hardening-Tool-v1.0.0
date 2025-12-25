@@ -1,0 +1,9 @@
+title,severity,description,category,remediation
+SSH Configuration File Not Found,Info,The SSH configuration file /etc/ssh/sshd_config was not found. SSH may not be installed or configured.,SSH Configuration,
+Password Maximum Age Too Long,Medium,Password maximum age is set to 99999 days. Recommended: 90 days or less.,Password Policy,
+Password Minimum Age Too Short,Low,Password minimum age is set to 0 days. Users can change passwords too frequently.,Password Policy,
+Password Minimum Length Not Set,Medium,PASS_MIN_LEN is not configured in login.defs.,Password Policy,
+No Firewall Detected,Critical,Neither UFW nor iptables appears to be configured. A firewall is essential for system security.,Firewall,
+/etc/passwd Permissions Correct,Info,/etc/passwd has correct permissions (644).,File Permissions,
+/etc/shadow Permissions Correct,Info,/etc/shadow has correct permissions (640).,File Permissions,
+No Unnecessary Services Found,Info,Common unnecessary services are not running.,Services,

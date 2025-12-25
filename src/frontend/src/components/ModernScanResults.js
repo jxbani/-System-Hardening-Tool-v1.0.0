@@ -65,7 +65,7 @@ function ModernScanResults({ scanData, onRefreshNeeded }) {
       filtered = filtered.filter(f =>
         f.title?.toLowerCase().includes(query) ||
         f.description?.toLowerCase().includes(query) ||
-        f.id?.toLowerCase().includes(query) ||
+        String(f.id || '').toLowerCase().includes(query) ||
         f.category?.toLowerCase().includes(query)
       );
     }
@@ -76,9 +76,9 @@ function ModernScanResults({ scanData, onRefreshNeeded }) {
         case 'severity':
           return getSeverityInfo(a.severity).priority - getSeverityInfo(b.severity).priority;
         case 'id':
-          return (a.id || '').localeCompare(b.id || '');
+          return String(a.id || '').localeCompare(String(b.id || ''));
         case 'category':
-          return (a.category || '').localeCompare(b.category || '');
+          return String(a.category || '').localeCompare(String(b.category || ''));
         default:
           return 0;
       }

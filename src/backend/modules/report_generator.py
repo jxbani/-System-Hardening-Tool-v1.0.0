@@ -319,17 +319,29 @@ class ReportGenerator:
         Calculate compliance score based on scan results.
 
         Score calculation:
-        - Generates a random score between 70 and 90
-        - This provides varied compliance scores for each scan
+        - First checks if scan_results already contains a complianceScore
+        - If present, uses the real calculated score from the scan
+        - Otherwise, calculates based on vulnerability counts
 
         Args:
             scan_results: Scan results
 
         Returns:
-            Compliance score (70-90)
+            Compliance score (0-100)
         """
-        # Generate random compliance score between 70 and 90
-        score = random.uniform(70.0, 90.0)
+        # Use the real compliance score if available
+        if "complianceScore" in scan_results:
+            return float(scan_results["complianceScore"])
+
+        # Fall back to calculating from vulnerability counts
+        critical = scan_results.get("criticalIssues", 0)
+        high = scan_results.get("highIssues", 0)
+        medium = scan_results.get("mediumIssues", 0)
+        low = scan_results.get("lowIssues", 0)
+
+        # Calculate score: start at 100, deduct points for vulnerabilities
+        deduction = (critical * 10 + high * 5 + medium * 2 + low * 1)
+        score = max(0, min(100, 100 - deduction))
         return round(score, 1)
 
     def _calculate_compliance_improvement(

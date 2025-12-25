@@ -19,8 +19,8 @@ function ModernDashboard() {
   const [loading, setLoading] = useState(true);
   const [scanning, setScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
-  const [generatingReport, setGeneratingReport] = useState(false);
   const [reportFormat, setReportFormat] = useState('pdf');
+  const [generatingReport, setGeneratingReport] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [backendStatus, setBackendStatus] = useState('checking');
@@ -156,27 +156,43 @@ function ModernDashboard() {
       'html': '.html',
       'excel': '.xlsx',
       'csv': '.csv',
-      'docx': '.docx',
-      'markdown': '.md',
-      'json': '.json'
+      'json': '.json',
+      'docx': '.docx'
     };
 
     try {
-      const blob = await generateReport({
+      const result = await generateReport({
         format: reportFormat,
-        title: 'IronGuard OS Security Report',
+        title: 'Security Report',
         scan_results: scanData
       });
 
-      // Create download link
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `ironguard-security-report-${new Date().toISOString().split('T')[0]}${formatExtensions[reportFormat]}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      // Handle JSON format differently - it returns an object, not a blob
+      if (reportFormat === 'json') {
+        // For JSON, create a blob from the returned data
+        const jsonData = result.report || result;
+        const jsonString = JSON.stringify(jsonData, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `security-report-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } else {
+        // For other formats (PDF, HTML, Excel, CSV), handle as blob
+        const url = window.URL.createObjectURL(result);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `security-report-${new Date().toISOString().split('T')[0]}${formatExtensions[reportFormat]}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }
 
       setSuccessMessage(`${reportFormat.toUpperCase()} report downloaded successfully!`);
     } catch (err) {
@@ -571,70 +587,35 @@ function ModernDashboard() {
             </section>
           )}
 
-          {/* Report Generation */}
+          {/* Generate Report */}
           {scanData && (
-            <section className="report-section">
-              <div className="report-card">
-                <div className="report-header">
-                  <div className="report-info">
-                    <h3 className="report-title">Generate Security Report</h3>
-                    <p className="report-description">Export detailed security analysis in your preferred format</p>
-                  </div>
-                  <div className="report-icon">
-                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M28 4H12a4 4 0 0 0-4 4v32a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4V16L28 4z"/>
-                      <polyline points="28 4 28 16 40 16"/>
-                      <line x1="16" y1="24" x2="32" y2="24"/>
-                      <line x1="16" y1="30" x2="32" y2="30"/>
-                      <line x1="16" y1="36" x2="24" y2="36"/>
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="report-controls">
-                  <div className="format-selector">
-                    <label htmlFor="reportFormat" className="format-label">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M8 0L0 4v6c0 4.97 3.44 9.62 8 10.75C12.56 19.62 16 14.97 16 10V4L8 0z"/>
-                      </svg>
-                      <span>Report Format</span>
-                    </label>
+            <section className="report-section-simple">
+              <div className="report-card-simple">
+                <h3 className="report-title-simple">Generate Security Report</h3>
+                <div className="report-controls-simple">
+                  <div className="format-group">
+                    <label htmlFor="format-select">Format:</label>
                     <select
-                      id="reportFormat"
-                      className="format-select"
+                      id="format-select"
                       value={reportFormat}
                       onChange={(e) => setReportFormat(e.target.value)}
                       disabled={generatingReport}
+                      className="format-select-simple"
                     >
-                      <option value="pdf">PDF Document</option>
-                      <option value="excel">Excel Spreadsheet (.xlsx)</option>
-                      <option value="csv">CSV Data (.csv)</option>
-                      <option value="docx">Word Document (.docx)</option>
-                      <option value="markdown">Markdown (.md)</option>
-                      <option value="html">HTML Page</option>
-                      <option value="json">JSON Data</option>
+                      <option value="pdf">PDF</option>
+                      <option value="html">HTML</option>
+                      <option value="excel">Excel</option>
+                      <option value="csv">CSV</option>
+                      <option value="json">JSON</option>
+                      <option value="docx">DOCX</option>
                     </select>
                   </div>
-
                   <button
-                    className="btn btn-secondary btn-report"
                     onClick={handleGenerateReport}
                     disabled={generatingReport}
+                    className="btn-generate-simple"
                   >
-                    {generatingReport ? (
-                      <>
-                        <span className="btn-spinner"></span>
-                        <span>Generating...</span>
-                      </>
-                    ) : (
-                      <>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M10 0L2 4v6c0 4.97 3.44 9.62 8 10.75C14.56 19.62 18 14.97 18 10V4L10 0zm0 18.7C5.91 17.58 4 13.43 4 10V5.43l6-2.68 6 2.68V10c0 3.43-1.91 7.58-6 8.7z"/>
-                          <path d="M7 9l2 2 4-4"/>
-                        </svg>
-                        <span>Generate Report</span>
-                      </>
-                    )}
+                    {generatingReport ? 'Generating...' : 'Generate Report'}
                   </button>
                 </div>
               </div>

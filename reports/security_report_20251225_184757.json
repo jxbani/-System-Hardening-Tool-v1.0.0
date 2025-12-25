@@ -1,0 +1,110 @@
+{
+  "title": "Security Report",
+  "generated_at": "2025-12-25T18:47:57.199847",
+  "generated_date": "2025-12-25 18:47:57",
+  "metadata": {},
+  "scan_summary": {
+    "total_findings": 8,
+    "critical": 1,
+    "high": 0,
+    "medium": 2,
+    "low": 1,
+    "info": 4,
+    "findings": [
+      {
+        "title": "SSH Configuration File Not Found",
+        "severity": "Info",
+        "description": "The SSH configuration file /etc/ssh/sshd_config was not found. SSH may not be installed or configured.",
+        "category": "SSH Configuration",
+        "remediation": ""
+      },
+      {
+        "title": "Password Maximum Age Too Long",
+        "severity": "Medium",
+        "description": "Password maximum age is set to 99999 days. Recommended: 90 days or less.",
+        "category": "Password Policy",
+        "remediation": ""
+      },
+      {
+        "title": "Password Minimum Age Too Short",
+        "severity": "Low",
+        "description": "Password minimum age is set to 0 days. Users can change passwords too frequently.",
+        "category": "Password Policy",
+        "remediation": ""
+      },
+      {
+        "title": "Password Minimum Length Not Set",
+        "severity": "Medium",
+        "description": "PASS_MIN_LEN is not configured in login.defs.",
+        "category": "Password Policy",
+        "remediation": ""
+      },
+      {
+        "title": "No Firewall Detected",
+        "severity": "Critical",
+        "description": "Neither UFW nor iptables appears to be configured. A firewall is essential for system security.",
+        "category": "Firewall",
+        "remediation": ""
+      },
+      {
+        "title": "/etc/passwd Permissions Correct",
+        "severity": "Info",
+        "description": "/etc/passwd has correct permissions (644).",
+        "category": "File Permissions",
+        "remediation": ""
+      },
+      {
+        "title": "/etc/shadow Permissions Correct",
+        "severity": "Info",
+        "description": "/etc/shadow has correct permissions (640).",
+        "category": "File Permissions",
+        "remediation": ""
+      },
+      {
+        "title": "No Unnecessary Services Found",
+        "severity": "Info",
+        "description": "Common unnecessary services are not running.",
+        "category": "Services",
+        "remediation": ""
+      }
+    ]
+  },
+  "hardening_summary": {},
+  "compliance": {
+    "current_score": 75.9
+  },
+  "before_after": {},
+  "charts": {
+    "severity_distribution": {
+      "labels": [
+        "Critical",
+        "High",
+        "Medium",
+        "Low",
+        "Info"
+      ],
+      "data": [
+        1,
+        0,
+        2,
+        1,
+        4
+      ],
+      "colors": [
+        "#dc3545",
+        "#fd7e14",
+        "#ffc107",
+        "#17a2b8",
+        "#6c757d"
+      ]
+    }
+  },
+  "timeline": [],
+  "recommendations": [
+    {
+      "priority": "critical",
+      "title": "Address Critical Security Issues",
+      "description": "Found 1 critical security issue(s). These should be addressed immediately as they pose significant security risks."
+    }
+  ]
+}
